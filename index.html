@@ -224,24 +224,7 @@
     </div>
     <div class="toast-container" id="toastContainer"></div>
 <script>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCCwVul0FxeFDApxlGoX6s671FaVWt_BwY",
-  authDomain: "card-sorting-ae-c2283.firebaseapp.com",
-  databaseURL: "https://card-sorting-ae-c2283-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "card-sorting-ae-c2283",
-  storageBucket: "card-sorting-ae-c2283.firebasestorage.app",
-  messagingSenderId: "9248431790",
-  appId: "1:9248431790:web:540bd4c9d7857a362b573f"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const firebaseConfig = {apiKey: "AIzaSyCCwVul0FxeFDApxlGoX6s671FaVWt_BwY",authDomain: "card-sorting-ae-c2283.firebaseapp.com",databaseURL: "https://card-sorting-ae-c2283-default-rtdb.europe-west1.firebasedatabase.app",projectId: "card-sorting-ae-c2283",storageBucket: "card-sorting-ae-c2283.firebasestorage.app",messagingSenderId: "9248431790", appId: "1:9248431790:web:540bd4c9d7857a362b573f"}
 let currentUser=null,isOnline=false,db=null,cardsData={},structureData={macroAreas:[]},currentFilter='all',selectedCardId=null,confirmCb=null,draggedCardId=null,draggedFromLocation=null;
 const gradients=['gradient-1','gradient-2','gradient-3','gradient-4','gradient-5','gradient-6','gradient-7','gradient-8','gradient-9'];
 const icons=['⚖️','🎁','📋','🏠','💳','🏢','🌍','📊','🪪'];
