@@ -93,7 +93,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .board-area{flex:1;overflow-y:auto;padding:20px}
 
 /* MACRO AREA */
-.macro-area{background:#fff;border-radius:12px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden}
+.macro-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:1400px){.macro-grid{grid-template-columns:1fr}}
+.macro-area{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden}
 .macro-area.collapsed .macro-content{display:none}
 .macro-header{padding:16px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:filter .2s}
 .macro-header:hover{filter:brightness(1.05)}
@@ -102,6 +104,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .macro-name{font-size:16px;font-weight:600}
 .macro-badge{background:rgba(255,255,255,.25);padding:4px 12px;border-radius:12px;font-size:13px;margin-left:10px}
 .macro-content{padding:16px}
+.editable-name{cursor:text;padding:2px 6px;border-radius:4px;transition:background .2s}
+.editable-name:hover{background:rgba(255,255,255,.2)}
+.edit-input{background:rgba(255,255,255,.9);border:2px solid #fff;border-radius:4px;padding:4px 8px;font-size:inherit;font-weight:inherit;color:#1e293b;width:auto;min-width:150px}
+.edit-input:focus{outline:none;border-color:#3b82f6}
+.delete-btn{opacity:0;transition:opacity .2s;background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:12px}
+.macro-header:hover .delete-btn{opacity:1}
+.delete-btn:hover{background:#ef4444}
+.sotto-delete-btn{opacity:0;transition:opacity .2s;background:#fee2e2;border:none;color:#dc2626;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:11px;margin-left:8px}
+.sotto-header:hover .sotto-delete-btn{opacity:1}
+.sotto-delete-btn:hover{background:#fecaca}
+.sotto-name.editable-name:hover{background:#e2e8f0}
 .gradient-1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.gradient-2{background:linear-gradient(135deg,#f43f5e,#fb7185)}.gradient-3{background:linear-gradient(135deg,#0ea5e9,#38bdf8)}.gradient-4{background:linear-gradient(135deg,#22c55e,#4ade80)}.gradient-5{background:linear-gradient(135deg,#f59e0b,#fbbf24)}.gradient-6{background:linear-gradient(135deg,#ec4899,#f472b6)}.gradient-7{background:linear-gradient(135deg,#14b8a6,#2dd4bf)}.gradient-8{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}.gradient-9{background:linear-gradient(135deg,#0891b2,#22d3ee)}
 
 /* SOTTO CATEGORIA */
@@ -651,17 +664,19 @@ function renderCards() {
 // ===== RENDER MACROS =====
 function renderMacros() {
     var container = document.getElementById("macroContainer");
-    var html = "";
+    var html = '<div class="macro-grid">';
     
     for (var i = 0; i < structureData.macroAreas.length; i++) {
         var m = structureData.macroAreas[i];
         var cnt = countMacroCards(m.id);
         
         html += '<div class="macro-area" id="macro-' + m.id + '" data-macro-id="' + m.id + '">';
-        html += '<div class="macro-header ' + gradients[i % 9] + '" data-toggle-macro="' + m.id + '">';
-        html += '<div class="macro-title"><span class="macro-icon">' + (m.icon || icons[i % icons.length]) + '</span>';
-        html += '<span class="macro-name">' + m.name + '</span>';
-        html += '<span class="macro-badge">' + cnt + ' schede</span></div>';
+        html += '<div class="macro-header ' + gradients[i % 9] + '">';
+        html += '<div class="macro-title" style="flex:1">';
+        html += '<span class="macro-icon" style="cursor:pointer" data-toggle-macro="' + m.id + '">' + (m.icon || icons[i % icons.length]) + '</span>';
+        html += '<span class="macro-name editable-name" data-edit-macro-name="' + m.id + '">' + m.name + '</span>';
+        html += '<span class="macro-badge" data-toggle-macro="' + m.id + '">' + cnt + '</span></div>';
+        html += '<button class="delete-btn" data-delete-macro="' + m.id + '" title="Elimina macro-area">🗑️</button>';
         html += '</div>';
         html += '<div class="macro-content">';
         
@@ -674,15 +689,19 @@ function renderMacros() {
         html += '</div></div>';
     }
     
+    html += '</div>';
     container.innerHTML = html;
 }
 
 function renderSotto(macroId, sotto) {
     var cards = getCardsInSotto(macroId, sotto.id);
     var html = '<div class="sotto-cat" data-macro-id="' + macroId + '" data-sotto-id="' + sotto.id + '">';
-    html += '<div class="sotto-header" data-toggle-sotto="' + sotto.id + '">';
-    html += '<span class="sotto-name">' + sotto.name + '</span>';
-    html += '<span class="sotto-count">' + cards.length + '</span></div>';
+    html += '<div class="sotto-header">';
+    html += '<span class="sotto-name editable-name" data-edit-sotto-name="' + macroId + '|' + sotto.id + '">' + sotto.name + '</span>';
+    html += '<span style="display:flex;align-items:center;gap:4px">';
+    html += '<span class="sotto-count" data-toggle-sotto="' + sotto.id + '">' + cards.length + '</span>';
+    html += '<button class="sotto-delete-btn" data-delete-sotto="' + macroId + '|' + sotto.id + '" title="Elimina">🗑️</button>';
+    html += '</span></div>';
     html += '<div class="sotto-cards">';
     
     for (var i = 0; i < cards.length; i++) {
@@ -980,6 +999,198 @@ function addMacroBottom() {
     saveData();
     renderAll();
     showToast("Macro-area aggiunta", "success");
+}
+
+// ===== EDITING NAMES =====
+function startEditMacroName(macroId) {
+    var macro = null;
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        if (structureData.macroAreas[i].id === macroId) {
+            macro = structureData.macroAreas[i];
+            break;
+        }
+    }
+    if (!macro) return;
+    
+    var el = document.querySelector('[data-edit-macro-name="' + macroId + '"]');
+    if (!el) return;
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "edit-input";
+    input.value = macro.name;
+    input.setAttribute("data-editing-macro", macroId);
+    
+    input.onblur = function() { saveMacroName(macroId, this.value); };
+    input.onkeypress = function(e) {
+        if (e.key === "Enter") { this.blur(); }
+        if (e.key === "Escape") { renderMacros(); }
+    };
+    
+    el.replaceWith(input);
+    input.focus();
+    input.select();
+}
+
+function saveMacroName(macroId, newName) {
+    newName = newName.trim();
+    if (!newName) {
+        renderMacros();
+        return;
+    }
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        if (structureData.macroAreas[i].id === macroId) {
+            structureData.macroAreas[i].name = newName;
+            break;
+        }
+    }
+    saveData();
+    renderAll();
+    showToast("Nome aggiornato", "success");
+}
+
+function startEditSottoName(macroId, sottoId) {
+    var sotto = null;
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        if (structureData.macroAreas[i].id === macroId) {
+            var sottos = structureData.macroAreas[i].sottoCategorie || [];
+            for (var j = 0; j < sottos.length; j++) {
+                if (sottos[j].id === sottoId) {
+                    sotto = sottos[j];
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    if (!sotto) return;
+    
+    var el = document.querySelector('[data-edit-sotto-name="' + macroId + '|' + sottoId + '"]');
+    if (!el) return;
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "edit-input";
+    input.value = sotto.name;
+    input.style.fontSize = "14px";
+    input.style.fontWeight = "600";
+    
+    input.onblur = function() { saveSottoName(macroId, sottoId, this.value); };
+    input.onkeypress = function(e) {
+        if (e.key === "Enter") { this.blur(); }
+        if (e.key === "Escape") { renderMacros(); }
+    };
+    
+    el.replaceWith(input);
+    input.focus();
+    input.select();
+}
+
+function saveSottoName(macroId, sottoId, newName) {
+    newName = newName.trim();
+    if (!newName) {
+        renderMacros();
+        return;
+    }
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        if (structureData.macroAreas[i].id === macroId) {
+            var sottos = structureData.macroAreas[i].sottoCategorie || [];
+            for (var j = 0; j < sottos.length; j++) {
+                if (sottos[j].id === sottoId) {
+                    sottos[j].name = newName;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    saveData();
+    renderMacros();
+    showToast("Nome aggiornato", "success");
+}
+
+// ===== DELETE CATEGORIES =====
+function deleteMacro(macroId) {
+    var macro = null;
+    var macroIdx = -1;
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        if (structureData.macroAreas[i].id === macroId) {
+            macro = structureData.macroAreas[i];
+            macroIdx = i;
+            break;
+        }
+    }
+    if (!macro) return;
+    
+    var cardCount = countMacroCards(macroId);
+    var msg = "Eliminare '" + macro.name + "'?";
+    if (cardCount > 0) {
+        msg += " Contiene " + cardCount + " schede che verranno rimosse.";
+    }
+    
+    showConfirm("Elimina macro-area", msg, function() {
+        // Rimuovi locations delle card in questa macro
+        var keys = Object.keys(cardsData);
+        for (var k = 0; k < keys.length; k++) {
+            var c = cardsData[keys[k]];
+            if (c.locations) {
+                c.locations = c.locations.filter(function(l) {
+                    return l.macroId !== macroId;
+                });
+            }
+        }
+        // Rimuovi macro
+        structureData.macroAreas.splice(macroIdx, 1);
+        saveData();
+        renderAll();
+        showToast("Macro-area eliminata", "info");
+    });
+}
+
+function deleteSotto(macroId, sottoId) {
+    var macro = null;
+    var sottoIdx = -1;
+    var sottoName = "";
+    
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        if (structureData.macroAreas[i].id === macroId) {
+            macro = structureData.macroAreas[i];
+            var sottos = macro.sottoCategorie || [];
+            for (var j = 0; j < sottos.length; j++) {
+                if (sottos[j].id === sottoId) {
+                    sottoIdx = j;
+                    sottoName = sottos[j].name;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    if (!macro || sottoIdx < 0) return;
+    
+    var cardCount = getCardsInSotto(macroId, sottoId).length;
+    var msg = "Eliminare '" + sottoName + "'?";
+    if (cardCount > 0) {
+        msg += " Contiene " + cardCount + " schede che verranno rimosse.";
+    }
+    
+    showConfirm("Elimina sotto-categoria", msg, function() {
+        // Rimuovi locations delle card in questa sotto
+        var keys = Object.keys(cardsData);
+        for (var k = 0; k < keys.length; k++) {
+            var c = cardsData[keys[k]];
+            if (c.locations) {
+                c.locations = c.locations.filter(function(l) {
+                    return !(l.macroId === macroId && l.sottoId === sottoId);
+                });
+            }
+        }
+        // Rimuovi sotto
+        macro.sottoCategorie.splice(sottoIdx, 1);
+        saveData();
+        renderAll();
+        showToast("Sotto-categoria eliminata", "info");
+    });
 }
 
 function addSotto(macroId) {
@@ -1537,6 +1748,36 @@ document.addEventListener("DOMContentLoaded", function() {
             e.stopPropagation();
             var parts = e.target.getAttribute("data-remove-loc").split("|");
             removeLoc(parts[0], parts[1], parts[2], parts[3] || null);
+            return;
+        }
+        
+        // Edit macro name
+        if (e.target.matches("[data-edit-macro-name]")) {
+            e.stopPropagation();
+            startEditMacroName(e.target.getAttribute("data-edit-macro-name"));
+            return;
+        }
+        
+        // Edit sotto name
+        if (e.target.matches("[data-edit-sotto-name]")) {
+            e.stopPropagation();
+            var parts = e.target.getAttribute("data-edit-sotto-name").split("|");
+            startEditSottoName(parts[0], parts[1]);
+            return;
+        }
+        
+        // Delete macro
+        if (e.target.matches("[data-delete-macro]")) {
+            e.stopPropagation();
+            deleteMacro(e.target.getAttribute("data-delete-macro"));
+            return;
+        }
+        
+        // Delete sotto
+        if (e.target.matches("[data-delete-sotto]")) {
+            e.stopPropagation();
+            var parts = e.target.getAttribute("data-delete-sotto").split("|");
+            deleteSotto(parts[0], parts[1]);
             return;
         }
         
