@@ -9,224 +9,311 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,Roboto,sans-serif;background:#f0f2f5;min-height:100vh}
-.header{background:linear-gradient(135deg,#1a365d,#2c5282);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000}
-.header h1{font-size:16px}
-.header-actions{display:flex;gap:8px;align-items:center}
-.connection-status{display:flex;align-items:center;gap:5px;font-size:10px;padding:4px 8px;background:rgba(255,255,255,.15);border-radius:12px}
-.status-dot{width:6px;height:6px;border-radius:50%;background:#fbbf24}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;min-height:100vh;font-size:14px}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#1a365d,#2c5282);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.header h1{font-size:20px;font-weight:600}
+.header-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.connection-status{display:flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;background:rgba(255,255,255,.15);border-radius:20px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#fbbf24}
 .status-dot.online{background:#34d399}
 .status-dot.offline{background:#f87171}
-.btn{padding:5px 10px;border:none;border-radius:5px;cursor:pointer;font-size:11px;font-weight:500}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
 .btn-primary{background:#3b82f6;color:#fff}
+.btn-primary:hover{background:#2563eb}
 .btn-success{background:#22c55e;color:#fff}
+.btn-success:hover{background:#16a34a}
 .btn-secondary{background:rgba(255,255,255,.2);color:#fff}
-.nav-bar{background:#fff;border-bottom:1px solid #e2e8f0;padding:6px 16px;display:flex;gap:4px;flex-wrap:wrap;align-items:center;position:sticky;top:44px;z-index:999}
-.nav-chip{padding:4px 10px;border-radius:12px;font-size:10px;cursor:pointer;color:#fff;display:flex;align-items:center;gap:4px}
-.nav-chip:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.btn-secondary:hover{background:rgba(255,255,255,.3)}
+
+/* NAV BAR */
+.nav-bar{background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:100}
+.nav-chip{padding:8px 14px;border-radius:20px;font-size:12px;cursor:pointer;color:#fff;display:flex;align-items:center;gap:6px;transition:all .2s}
+.nav-chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.nav-chip .chip-count{background:rgba(255,255,255,.3);padding:2px 8px;border-radius:10px;font-size:11px}
 .chip-1{background:#6366f1}.chip-2{background:#f43f5e}.chip-3{background:#0ea5e9}.chip-4{background:#22c55e}.chip-5{background:#f59e0b}.chip-6{background:#ec4899}.chip-7{background:#14b8a6}.chip-8{background:#8b5cf6}.chip-9{background:#0891b2}
-.nav-actions{margin-left:auto;display:flex;gap:6px}
-.nav-actions button{padding:4px 8px;font-size:10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer}
-.main-container{display:flex;height:calc(100vh - 90px)}
-.sidebar{width:380px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column}
-.sidebar-header{padding:10px;border-bottom:1px solid #e2e8f0;background:#f8fafc}
-.sidebar-header h2{font-size:12px;margin-bottom:6px}
-.search-row{display:flex;gap:6px}
-.search-box{flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:5px;font-size:11px}
-.asis-filter{padding:6px;border:1px solid #e2e8f0;border-radius:5px;font-size:10px;max-width:140px}
-.filter-row{display:flex;gap:4px;margin-top:6px}
-.filter-btn{flex:1;padding:4px;font-size:9px;border:1px solid #e2e8f0;background:#fff;border-radius:3px;cursor:pointer}
+.nav-actions{margin-left:auto;display:flex;gap:8px}
+.nav-actions button{padding:8px 14px;font-size:12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;cursor:pointer}
+.nav-actions button:hover{background:#e2e8f0}
+
+/* MAIN LAYOUT */
+.main-container{display:flex;min-height:calc(100vh - 130px)}
+
+/* SIDEBAR */
+.sidebar{width:420px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-header{padding:16px;border-bottom:1px solid #e2e8f0;background:#f8fafc}
+.sidebar-header h2{font-size:16px;color:#1e293b;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sidebar-stats{display:flex;gap:12px;margin-bottom:12px}
+.stat-box{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;flex:1;text-align:center}
+.stat-num{font-size:20px;font-weight:700;color:#1e293b}
+.stat-label{font-size:10px;color:#64748b;text-transform:uppercase}
+.stat-box.highlight{background:#fef3c7;border-color:#f59e0b}
+.stat-box.highlight .stat-num{color:#d97706}
+.search-row{display:flex;gap:8px}
+.search-box{flex:1;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px}
+.search-box:focus{outline:none;border-color:#3b82f6}
+.asis-filter{padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;background:#fff;max-width:160px}
+.filter-row{display:flex;gap:6px;margin-top:10px}
+.filter-btn{flex:1;padding:8px;font-size:12px;border:1px solid #e2e8f0;background:#fff;border-radius:6px;cursor:pointer;font-weight:500}
+.filter-btn:hover{background:#f1f5f9}
 .filter-btn.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
-.cards-container{flex:1;overflow-y:auto;padding:8px}
+
+/* CARDS CONTAINER */
+.cards-container{flex:1;overflow-y:auto;padding:12px}
 .cards-container.drag-over{background:#eff6ff}
-.card-count{font-size:9px;color:#64748b;padding:4px 8px;background:#f1f5f9;border-radius:3px;margin-bottom:8px}
-.card-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:6px;cursor:grab}
-.card-item:hover{border-color:#3b82f6;box-shadow:0 2px 6px rgba(59,130,246,.15)}
-.card-item.dragging{opacity:.4}
-.card-item.assigned{border-left:3px solid #22c55e}
-.card-item.multi-assigned{border-left:3px solid #8b5cf6}
-.card-header{display:flex;justify-content:space-between;margin-bottom:4px}
-.card-id{font-size:8px;color:#94a3b8}
-.card-actions{display:flex;gap:2px}
-.card-actions button{padding:2px 6px;font-size:10px;border:none;border-radius:3px;cursor:pointer}
-.dup-btn{background:#22c55e;color:#fff;font-weight:bold}
-.edit-btn{background:#f1f5f9;color:#64748b}
-.card-label{font-size:11px;font-weight:500;color:#1e293b;line-height:1.3;margin-bottom:4px;cursor:pointer}
-.card-asis{font-size:9px;color:#1e40af;background:#dbeafe;padding:2px 6px;border-radius:3px;display:inline-block;margin-bottom:4px}
-.card-url{font-size:9px;color:#3b82f6;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px}
-.card-locations{display:flex;flex-wrap:wrap;gap:3px}
-.location-tag{font-size:8px;padding:2px 5px;background:#dcfce7;color:#166534;border-radius:3px;display:flex;align-items:center;gap:3px}
-.board-area{flex:1;overflow-y:auto;padding:12px}
-#macroContainer {
-   display: grid;
-   grid-template-columns: repeat(2, 1fr); /* Crea le due colonne */
-   gap: 16px;                             /* Spazio tra le colonne e le righe */
-   align-items: start;                    /* Impedisce alle card di allungarsi se una è più corta */
-}
-    @media (max-width: 1100px) {
-    #macroContainer { grid-template-columns: 1fr; }
-}
-.macro-area{background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.06);overflow:hidden}
+
+/* CARD ITEM IN SIDEBAR */
+.card-item{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px;cursor:grab;transition:all .2s;position:relative}
+.card-item:hover{border-color:#3b82f6;box-shadow:0 4px 12px rgba(59,130,246,.15)}
+.card-item.dragging{opacity:.4;cursor:grabbing}
+.card-item.assigned{border-left:4px solid #22c55e}
+.card-item.multi-assigned{border-left:4px solid #8b5cf6}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.card-id{font-size:11px;color:#64748b;background:#f1f5f9;padding:3px 8px;border-radius:4px}
+.card-menu{position:relative}
+.card-menu-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:4px 8px;color:#64748b;border-radius:4px}
+.card-menu-btn:hover{background:#f1f5f9;color:#1e293b}
+.card-menu-dropdown{position:absolute;right:0;top:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);display:none;min-width:140px;z-index:50}
+.card-menu-dropdown.show{display:block}
+.card-menu-dropdown button{display:block;width:100%;padding:10px 14px;border:none;background:none;text-align:left;cursor:pointer;font-size:13px}
+.card-menu-dropdown button:hover{background:#f1f5f9}
+.card-menu-dropdown button.danger{color:#dc2626}
+.card-menu-dropdown button.danger:hover{background:#fef2f2}
+.card-label{font-size:15px;font-weight:500;color:#1e293b;line-height:1.4;cursor:pointer}
+.card-label:hover{color:#3b82f6}
+.card-asis{font-size:12px;color:#1e40af;background:#dbeafe;padding:4px 10px;border-radius:6px;display:inline-block;margin-top:8px}
+.card-url{font-size:12px;color:#3b82f6;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:6px}
+.card-locations{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.location-tag{font-size:11px;padding:4px 10px;background:#dcfce7;color:#166534;border-radius:6px;display:flex;align-items:center;gap:4px}
+.location-tag .remove-loc{cursor:pointer;font-weight:700;font-size:14px}
+.location-tag .remove-loc:hover{color:#dc2626}
+
+/* BOARD AREA */
+.board-area{flex:1;overflow-y:auto;padding:20px}
+
+/* MACRO AREA */
+.macro-area{background:#fff;border-radius:12px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden}
 .macro-area.collapsed .macro-content{display:none}
-.macro-header{padding:10px 14px;color:#fff;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.macro-title{display:flex;align-items:center;gap:8px;flex:1}
-.macro-icon{font-size:16px}
-.macro-name-input{background:rgba(255,255,255,.2);border:none;color:#fff;font-size:13px;font-weight:600;padding:3px 6px;border-radius:3px;width:260px}
-.macro-badge{background:rgba(255,255,255,.25);padding:2px 8px;border-radius:10px;font-size:10px;margin-left:8px}
-.macro-actions button{background:rgba(255,255,255,.2);border:none;color:#fff;padding:3px 6px;border-radius:3px;cursor:pointer;font-size:10px;margin-left:4px}
-.macro-content{padding:10px}
+.macro-header{padding:16px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:filter .2s}
+.macro-header:hover{filter:brightness(1.05)}
+.macro-title{display:flex;align-items:center;gap:10px;flex:1}
+.macro-icon{font-size:22px}
+.macro-name{font-size:16px;font-weight:600}
+.macro-badge{background:rgba(255,255,255,.25);padding:4px 12px;border-radius:12px;font-size:13px;margin-left:10px}
+.macro-content{padding:16px}
 .gradient-1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.gradient-2{background:linear-gradient(135deg,#f43f5e,#fb7185)}.gradient-3{background:linear-gradient(135deg,#0ea5e9,#38bdf8)}.gradient-4{background:linear-gradient(135deg,#22c55e,#4ade80)}.gradient-5{background:linear-gradient(135deg,#f59e0b,#fbbf24)}.gradient-6{background:linear-gradient(135deg,#ec4899,#f472b6)}.gradient-7{background:linear-gradient(135deg,#14b8a6,#2dd4bf)}.gradient-8{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}.gradient-9{background:linear-gradient(135deg,#0891b2,#22d3ee)}
-.sotto-cat{background:#f8fafc;border:2px dashed #e2e8f0;border-radius:6px;margin-bottom:8px;min-height:50px}
+
+/* SOTTO CATEGORIA */
+.sotto-cat{background:#f8fafc;border:2px dashed #e2e8f0;border-radius:10px;margin-bottom:12px;transition:all .2s}
 .sotto-cat.drag-over{border-color:#3b82f6;background:#eff6ff}
-.sotto-header{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:4px 4px 0 0;border-bottom:1px solid #e2e8f0}
-.sotto-name-input{border:none;background:transparent;font-size:12px;font-weight:600;color:#1e293b;width:200px}
-.sotto-count{font-size:9px;color:#64748b;background:#e2e8f0;padding:2px 6px;border-radius:8px}
-.sotto-cards{padding:8px;display:flex;flex-wrap:wrap;gap:4px;min-height:30px}
-.sotto-card{background:#fff;border:1px solid #e2e8f0;border-radius:4px;padding:4px 8px;font-size:10px;cursor:pointer;max-width:160px;position:relative}
-.sotto-card:hover{border-color:#3b82f6}
-.sotto-card .remove-card{position:absolute;top:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#fee2e2;color:#dc2626;font-size:8px;display:none;align-items:center;justify-content:center;cursor:pointer}
-.sotto-card:hover .remove-card{display:flex}
-.edit-sotto-card{opacity:0.5;transition:opacity .2s}
-.sotto-card:hover .edit-sotto-card{opacity:1}
+.sotto-cat.collapsed .sotto-cards{display:none}
+.sotto-header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fff;border-radius:8px 8px 0 0;border-bottom:1px solid #e2e8f0}
+.sotto-header:hover{background:#f1f5f9}
+.sotto-name{font-size:14px;font-weight:600;color:#1e293b}
+.sotto-count{font-size:12px;color:#64748b;background:#e2e8f0;padding:4px 10px;border-radius:10px}
+.sotto-cards{padding:12px;display:flex;flex-wrap:wrap;gap:8px;min-height:60px}
+
+/* CARD IN CATEGORY */
+.sotto-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;cursor:pointer;width:200px;transition:all .2s;position:relative}
+.sotto-card:hover{border-color:#3b82f6;box-shadow:0 4px 12px rgba(59,130,246,.15)}
 .sotto-card.drag-over-card{border:2px solid #8b5cf6;background:#f5f3ff}
-.sotto-card.is-group{border-left:3px solid #8b5cf6}
-.card-group{margin-left:12px;padding-left:8px;border-left:2px dashed #c4b5fd;margin-top:4px}
-.card-group .sotto-card{background:#faf5ff;border:1px dashed #c4b5fd;max-width:150px}
-.card-group .sotto-card:hover{border-color:#8b5cf6}
-.group-badge{font-size:7px;background:#8b5cf6;color:#fff;padding:1px 4px;border-radius:3px;margin-left:4px}
-.ungroup-btn{font-size:8px;color:#8b5cf6;cursor:pointer;margin-left:4px}
-.ungroup-btn:hover{color:#7c3aed}
-.dup-sotto-btn{font-size:9px;cursor:pointer;padding:1px 4px;background:#dcfce7;color:#16a34a;border-radius:3px;font-weight:bold}
-.dup-sotto-btn:hover{background:#bbf7d0}
-.terzo-container{margin-left:12px;padding-left:10px;border-left:2px solid #e2e8f0}
-.add-btn{width:100%;padding:6px;border:1px dashed #cbd5e1;background:transparent;border-radius:4px;color:#64748b;cursor:pointer;font-size:10px}
+.sotto-card.is-group{border-left:4px solid #8b5cf6}
+.sotto-card .card-id{font-size:10px}
+.sotto-card .card-label{font-size:13px;margin-top:6px}
+.sotto-card .card-menu-btn{position:absolute;top:8px;right:8px;font-size:16px;opacity:0;transition:opacity .2s}
+.sotto-card:hover .card-menu-btn{opacity:1}
+.card-group{margin-left:16px;padding-left:12px;border-left:2px dashed #c4b5fd;margin-top:8px}
+.card-group .sotto-card{background:#faf5ff;border:1px dashed #c4b5fd;width:180px}
+.group-badge{font-size:10px;background:#8b5cf6;color:#fff;padding:2px 6px;border-radius:4px;margin-left:6px}
+
+/* TERZO LIVELLO */
+.terzo-container{margin-left:16px;padding-left:12px;border-left:2px solid #e2e8f0;margin-top:8px}
+
+/* ADD BUTTONS */
+.add-btn{width:100%;padding:12px;border:2px dashed #cbd5e1;background:transparent;border-radius:8px;color:#64748b;cursor:pointer;font-size:13px;transition:all .2s}
 .add-btn:hover{border-color:#3b82f6;color:#3b82f6;background:#eff6ff}
-.delete-btn{background:transparent;border:none;color:#94a3b8;cursor:pointer;padding:2px 4px;font-size:10px}
-.delete-btn:hover{color:#dc2626}
+
+/* MODALS */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:2000}
 .modal-overlay.active{display:flex}
-.modal{background:#fff;border-radius:10px;padding:20px;width:480px;max-width:95%;max-height:90vh;overflow-y:auto}
-.modal h3{margin-bottom:14px;font-size:15px}
-.modal-input{width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:5px;font-size:12px;margin-bottom:8px}
-.modal-label{font-size:10px;color:#64748b;margin-bottom:3px;display:block}
-.modal-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}
-.modal-row{display:flex;gap:8px;margin-bottom:8px}
+.modal{background:#fff;border-radius:16px;padding:24px;width:520px;max-width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h3{margin-bottom:20px;font-size:18px;color:#1e293b}
+.modal-section{margin-bottom:16px}
+.modal-label{font-size:11px;color:#64748b;margin-bottom:6px;display:block;font-weight:600;text-transform:uppercase}
+.modal-input{width:100%;padding:12px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px}
+.modal-input:focus{outline:none;border-color:#3b82f6}
+.modal-value{font-size:14px;color:#1e293b;line-height:1.5}
+.modal-value.highlight{background:#f0fdf4;color:#059669;padding:10px 14px;border-radius:8px;font-weight:500}
+.modal-value.asis{background:#dbeafe;color:#1e40af;padding:8px 12px;border-radius:8px;display:inline-block}
+.modal-row{display:flex;gap:12px;margin-bottom:12px}
+.modal-row .modal-section{flex:1;margin-bottom:0}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid #e2e8f0}
 .user-modal{text-align:center}
-.user-modal p{color:#64748b;margin-bottom:16px;font-size:12px}
-.admin-modal{width:600px}
-.session-list{max-height:300px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:12px}
-.session-item{padding:10px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center}
-.session-name{font-weight:600;font-size:13px}
-.session-meta{font-size:10px;color:#64748b}
-.confirm-dialog{width:340px;text-align:center}
-.confirm-dialog p{color:#64748b;font-size:12px;margin-bottom:16px}
+.user-modal p{color:#64748b;margin-bottom:20px;font-size:14px}
+.admin-modal{width:640px}
+.session-list{max-height:300px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:16px}
+.session-item{padding:14px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center}
+.session-item:last-child{border-bottom:none}
+.session-item:hover{background:#f8fafc}
+.session-name{font-weight:600;font-size:14px}
+.session-meta{font-size:12px;color:#64748b}
+.confirm-dialog{width:380px;text-align:center}
+.confirm-dialog p{color:#64748b;font-size:14px;margin-bottom:20px}
 .btn-danger{background:#ef4444;color:#fff}
-.toast-container{position:fixed;bottom:16px;right:16px;z-index:3000}
-.toast{background:#1e293b;color:#fff;padding:8px 14px;border-radius:6px;margin-top:6px;font-size:11px;animation:slideIn .3s}
+.btn-danger:hover{background:#dc2626}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:3000}
+.toast{background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;margin-top:8px;font-size:13px;animation:slideIn .3s ease}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-.toast.success{background:#22c55e}.toast.error{background:#ef4444}.toast.info{background:#3b82f6}
+.toast.success{background:#22c55e}
+.toast.error{background:#ef4444}
+.toast.info{background:#3b82f6}
+
 .file-input{display:none}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+    .sidebar{width:360px}
+    .sotto-card{width:180px}
+}
+@media(max-width:900px){
+    .main-container{flex-direction:column}
+    .sidebar{width:100%;max-height:50vh}
+    .sotto-card{width:calc(50% - 4px)}
+}
 </style>
 </head>
 <body>
+
+<!-- MODALS -->
 <div class="modal-overlay active" id="userModal">
 <div class="modal user-modal">
-<h3>Card Sorting - Agenzia delle Entrate</h3>
-<p>Inserisci il tuo nome per iniziare</p>
+<h3>🏛️ Card Sorting - Agenzia delle Entrate</h3>
+<p>Inserisci il tuo nome per iniziare la sessione collaborativa</p>
 <input type="text" class="modal-input" id="usernameInput" placeholder="Il tuo nome..." maxlength="30">
 <div class="modal-actions" style="justify-content:center">
 <button class="btn btn-primary" id="enterBtn">Entra</button>
 </div>
 </div>
 </div>
+
 <div class="modal-overlay" id="cardModal">
 <div class="modal">
-<h3>Dettaglio Scheda</h3>
+<h3>📋 Dettaglio Scheda</h3>
 <div id="cardModalContent"></div>
 <div class="modal-actions">
-<button class="btn" id="closeCardBtn" style="background:#e2e8f0;color:#1e293b">Chiudi</button>
-<button class="btn btn-primary" id="saveCardBtn">Salva</button>
+<button class="btn btn-secondary" onclick="closeCardModal()" style="background:#e2e8f0;color:#1e293b">Chiudi</button>
+<button class="btn btn-primary" id="saveCardBtn">Salva modifiche</button>
 </div>
 </div>
 </div>
+
 <div class="modal-overlay" id="adminModal">
 <div class="modal admin-modal">
-<h3>Gestione Sessioni</h3>
-<div style="margin-bottom:12px">
-<label class="modal-label">Nome sessione</label>
+<h3>💾 Gestione Sessioni</h3>
+<div style="margin-bottom:16px">
+<label class="modal-label">Salva sessione corrente</label>
 <div class="modal-row">
 <input type="text" class="modal-input" id="sessionNameInput" placeholder="Nome sessione..." style="margin:0">
 <button class="btn btn-primary" id="saveSessionBtn">Salva</button>
 </div>
 </div>
+<label class="modal-label">Sessioni salvate</label>
 <div class="session-list" id="sessionList"></div>
-<div class="modal-row">
-<button class="btn" style="background:#f59e0b;color:#fff" id="exportBtn">Esporta Excel</button>
+<div class="modal-row" style="margin-bottom:0">
+<button class="btn" style="background:#f59e0b;color:#fff" id="exportBtn">📥 Esporta Excel</button>
 <label class="btn" style="background:#e2e8f0;color:#1e293b;cursor:pointer">
-Importa Excel<input type="file" class="file-input" id="importFile" accept=".xlsx,.csv">
+📤 Importa Excel<input type="file" class="file-input" id="importFile" accept=".xlsx,.csv">
 </label>
 </div>
 <div class="modal-actions">
-<button class="btn" id="closeAdminBtn" style="background:#e2e8f0;color:#1e293b">Chiudi</button>
+<button class="btn" onclick="closeAdminModal()" style="background:#e2e8f0;color:#1e293b">Chiudi</button>
 </div>
 </div>
 </div>
+
 <div class="modal-overlay" id="confirmDialog">
 <div class="modal confirm-dialog">
 <h3 id="confirmTitle">Conferma</h3>
 <p id="confirmMsg">Sei sicuro?</p>
 <div class="modal-actions" style="justify-content:center">
-<button class="btn" id="cancelConfirmBtn" style="background:#e2e8f0;color:#1e293b">Annulla</button>
-<button class="btn btn-danger" id="execConfirmBtn">Conferma</button>
+<button class="btn" onclick="closeConfirm()" style="background:#e2e8f0;color:#1e293b">Annulla</button>
+<button class="btn btn-danger" onclick="execConfirm()">Conferma</button>
 </div>
 </div>
 </div>
+
+<!-- HEADER -->
 <div class="header">
-<h1>Card Sorting - Agenzia delle Entrate</h1>
+<h1>🏛️ Card Sorting - Agenzia delle Entrate</h1>
 <div class="header-actions">
 <div class="connection-status"><span class="status-dot" id="statusDot"></span><span id="connText">Connessione...</span></div>
-<div id="usersOnline" style="font-size:10px;padding:4px 8px;background:rgba(255,255,255,.15);border-radius:12px">1 utente</div>
-<button class="btn btn-secondary" id="adminBtn">Sessioni</button>
-<button class="btn btn-success" id="exportBtnHeader">Excel</button>
+<div id="usersOnline" style="font-size:12px;padding:6px 12px;background:rgba(255,255,255,.15);border-radius:20px">👤 1 utente</div>
+<button class="btn btn-secondary" id="adminBtn">💾 Sessioni</button>
+<button class="btn btn-success" id="exportBtnHeader">📥 Excel</button>
 </div>
 </div>
+
+<!-- NAV BAR -->
 <div class="nav-bar" id="navBar">
 <div class="nav-actions">
-<button id="expandAllBtn">Espandi</button>
-<button id="collapseAllBtn">Comprimi</button>
-<button id="addMacroTopBtn" style="background:#22c55e;color:#fff">+ Nuova area</button>
+<button id="expandAllBtn">▼ Espandi tutto</button>
+<button id="collapseAllBtn">▲ Comprimi tutto</button>
+<button id="addMacroTopBtn" style="background:#22c55e;color:#fff;border-color:#22c55e">+ Nuova macro-area</button>
 </div>
 </div>
+
+<!-- MAIN -->
 <div class="main-container">
 <div class="sidebar">
 <div class="sidebar-header">
-<h2>Schede (<span id="cardCountNum">0</span>)</h2>
+<h2>📋 Schede da classificare</h2>
+<div class="sidebar-stats">
+<div class="stat-box highlight">
+<div class="stat-num" id="statTodo">0</div>
+<div class="stat-label">Da fare</div>
+</div>
+<div class="stat-box">
+<div class="stat-num" id="statDone">0</div>
+<div class="stat-label">Fatte</div>
+</div>
+<div class="stat-box">
+<div class="stat-num" id="statTotal">0</div>
+<div class="stat-label">Totali</div>
+</div>
+</div>
 <div class="search-row">
-<input type="text" class="search-box" id="searchBox" placeholder="Cerca...">
-<select class="asis-filter" id="asisFilter"><option value="">Tutte</option></select>
+<input type="text" class="search-box" id="searchBox" placeholder="🔍 Cerca scheda...">
+<select class="asis-filter" id="asisFilter"><option value="">Tutte le aree</option></select>
 </div>
 <div class="filter-row">
-<button class="filter-btn active" data-f="all">Tutte</button>
-<button class="filter-btn" data-f="todo">Da fare</button>
+<button class="filter-btn active" data-f="todo">Da fare</button>
 <button class="filter-btn" data-f="done">Fatte</button>
+<button class="filter-btn" data-f="all">Tutte</button>
 </div>
 </div>
 <div class="cards-container" id="cardsContainer"></div>
 </div>
 <div class="board-area" id="boardArea">
 <div id="macroContainer"></div>
-<button class="add-btn" id="addMacroBottomBtn" style="margin-top:8px">+ Aggiungi macro-area</button>
+<button class="add-btn" id="addMacroBottomBtn" style="margin-top:12px">+ Aggiungi macro-area in fondo</button>
 </div>
 </div>
+
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-// ===== CONFIG =====
+// ===== FIREBASE CONFIG =====
 var firebaseConfig = {
     apiKey: "AIzaSyCCwVul0FxeFDApxlGoX6s671FaVWt_BwY",
     authDomain: "card-sorting-ae-c2283.firebaseapp.com",
     databaseURL: "https://card-sorting-ae-c2283-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "card-sorting-ae-c2283"
+    projectId: "card-sorting-ae-c2283",
+    storageBucket: "card-sorting-ae-c2283.firebasestorage.app",
+    messagingSenderId: "9248431790",
+    appId: "1:9248431790:web:540bd4c9d7857a362b573f"
 };
 
 // ===== DATA =====
@@ -240,28 +327,20 @@ var isOnline = false;
 var db = null;
 var cardsData = {};
 var structureData = {macroAreas: []};
-var currentFilter = "all";
+var currentFilter = "todo";
 var selectedCardId = null;
 var confirmCb = null;
 var draggedCardId = null;
 var draggedFromLoc = null;
+var openMenuId = null;
 
 var gradients = ["gradient-1","gradient-2","gradient-3","gradient-4","gradient-5","gradient-6","gradient-7","gradient-8","gradient-9"];
-var icons = ["⚖️","🎁","📋","🏠","💳","🏢","🌍","📊","🪪"];
+var icons = ["⚖️","🏠","🪪","📋","⚖️","💳","🎁","💰","🌍"];
 
 // ===== INIT =====
 function initApp() {
     populateAsisFilter();
-    if (firebaseConfig.apiKey === "FIREBASE_API_KEY") {
-        initLocal();
-    } else {
-        initFirebase();
-    }
-}
-
-function initLocal() {
-    setStatus("offline");
-    loadLocal();
+    initFirebase();
 }
 
 function initFirebase() {
@@ -278,7 +357,8 @@ function initFirebase() {
         });
     } catch(e) {
         console.error(e);
-        initLocal();
+        setStatus("offline");
+        loadLocal();
     }
 }
 
@@ -291,7 +371,7 @@ function setStatus(s) {
         isOnline = true;
     } else if (s === "offline") {
         dot.className = "status-dot offline";
-        txt.textContent = "Locale";
+        txt.textContent = "Offline";
         isOnline = false;
     } else {
         dot.className = "status-dot";
@@ -303,14 +383,12 @@ function syncFirebase() {
     db.ref("cards").on("value", function(s) {
         var d = s.val();
         cardsData = d || JSON.parse(JSON.stringify(initialCards));
-        renderCards();
-        renderNavChips();
+        renderAll();
     });
     db.ref("structure").on("value", function(s) {
         var d = s.val();
         structureData = d || JSON.parse(JSON.stringify(initialStructure));
-        renderMacros();
-        renderNavChips();
+        renderAll();
     });
     if (currentUser) {
         var uid = "u_" + Date.now();
@@ -319,19 +397,17 @@ function syncFirebase() {
         ref.onDisconnect().remove();
         db.ref("users").on("value", function(s) {
             var n = Object.keys(s.val() || {}).length;
-            document.getElementById("usersOnline").textContent = n + " utent" + (n === 1 ? "e" : "i");
+            document.getElementById("usersOnline").textContent = "👤 " + n + " utent" + (n === 1 ? "e" : "i");
         });
     }
 }
 
 function loadLocal() {
-    var c = localStorage.getItem("cs_cards_v5");
-    var s = localStorage.getItem("cs_struct_v5");
+    var c = localStorage.getItem("cs_cards_v9");
+    var s = localStorage.getItem("cs_struct_v9");
     cardsData = c ? JSON.parse(c) : JSON.parse(JSON.stringify(initialCards));
     structureData = s ? JSON.parse(s) : JSON.parse(JSON.stringify(initialStructure));
-    renderCards();
-    renderMacros();
-    renderNavChips();
+    renderAll();
 }
 
 function saveData() {
@@ -339,8 +415,8 @@ function saveData() {
         db.ref("cards").set(cardsData);
         db.ref("structure").set(structureData);
     }
-    localStorage.setItem("cs_cards_v5", JSON.stringify(cardsData));
-    localStorage.setItem("cs_struct_v5", JSON.stringify(structureData));
+    localStorage.setItem("cs_cards_v9", JSON.stringify(cardsData));
+    localStorage.setItem("cs_struct_v9", JSON.stringify(structureData));
 }
 
 // ===== USER =====
@@ -375,227 +451,36 @@ function setFilter(f) {
     renderCards();
 }
 
-// ===== NAV CHIPS =====
-function renderNavChips() {
-    var nav = document.getElementById("navBar");
-    var chips = nav.querySelectorAll(".nav-chip");
-    for (var i = 0; i < chips.length; i++) chips[i].remove();
-    
-    var actions = nav.querySelector(".nav-actions");
-    for (var i = 0; i < structureData.macroAreas.length; i++) {
-        var m = structureData.macroAreas[i];
-        var cnt = countMacroCards(m.id);
-        var chip = document.createElement("div");
-        chip.className = "nav-chip chip-" + ((i % 9) + 1);
-        chip.innerHTML = "<span>" + (m.icon || icons[i % icons.length]) + "</span><span>" + (m.name.length > 12 ? m.name.substring(0,12) + "..." : m.name) + "</span><span style='background:rgba(255,255,255,.3);padding:1px 5px;border-radius:8px;font-size:9px'>" + cnt + "</span>";
-        chip.setAttribute("data-macro-id", m.id);
-        chip.onclick = (function(id) { return function() { scrollToMacro(id); }; })(m.id);
-        nav.insertBefore(chip, actions);
-    }
-}
-
-function scrollToMacro(id) {
-    var el = document.getElementById("macro-" + id);
-    if (el) {
-        el.classList.remove("collapsed");
-        var y = el.getBoundingClientRect().top + window.scrollY - 100;
-        window.scrollTo({top: y, behavior: "smooth"});
-        el.style.boxShadow = "0 0 0 3px #3b82f6";
-        setTimeout(function() { el.style.boxShadow = ""; }, 2000);
-    }
-}
-
-function toggleAll(expand) {
-    var macros = document.querySelectorAll(".macro-area");
-    for (var i = 0; i < macros.length; i++) {
-        if (expand) macros[i].classList.remove("collapsed");
-        else macros[i].classList.add("collapsed");
-    }
-}
-
-// ===== RENDER CARDS =====
-function renderCards() {
-    var container = document.getElementById("cardsContainer");
-    var search = document.getElementById("searchBox").value.toLowerCase();
-    var asisVal = document.getElementById("asisFilter").value;
-    
+// ===== HELPERS =====
+function getAllChildIds() {
+    var children = [];
     var keys = Object.keys(cardsData);
-    var filtered = [];
-    
-    for (var i = 0; i < keys.length; i++) {
-        var id = keys[i];
-        var c = cardsData[id];
-        var txt = (c.label + " " + (c.altLabel || "") + " " + id + " " + (c.originalMacro || "")).toLowerCase();
-        if (search && txt.indexOf(search) === -1) continue;
-        if (asisVal && c.asisCategory !== asisVal) continue;
-        var done = c.locations && c.locations.length > 0;
-        if (currentFilter === "done" && !done) continue;
-        if (currentFilter === "todo" && done) continue;
-        filtered.push({id: id, card: c, done: done});
-    }
-    
-    filtered.sort(function(a, b) {
-        if (a.done !== b.done) return a.done ? 1 : -1;
-        return parseInt(a.id) - parseInt(b.id);
-    });
-    
-    var total = keys.length;
-    var doneCount = 0;
     for (var i = 0; i < keys.length; i++) {
         var c = cardsData[keys[i]];
-        if (c.locations && c.locations.length > 0) doneCount++;
-    }
-    
-    document.getElementById("cardCountNum").textContent = filtered.length + "/" + total;
-    
-    var html = '<div class="card-count">' + total + ' totali | ' + doneCount + ' assegnate | ' + (total - doneCount) + ' da fare</div>';
-    
-    for (var i = 0; i < filtered.length; i++) {
-        var id = filtered[i].id;
-        var c = filtered[i].card;
-        var isDone = filtered[i].done;
-        var isMulti = c.locations && c.locations.length > 1;
-        
-        html += '<div class="card-item ' + (isDone ? 'assigned ' : '') + (isMulti ? 'multi-assigned' : '') + '" draggable="true" data-card-id="' + id + '">';
-        html += '<div class="card-header"><span class="card-id">ID ' + id + '</span>';
-        html += '<div class="card-actions"><button class="dup-btn" data-dup="' + id + '" title="Duplica">+</button>';
-        html += '<button class="edit-btn" data-edit="' + id + '" title="Modifica">✏️</button></div></div>';
-        html += '<div class="card-label" data-edit="' + id + '">' + (c.altLabel || c.label) + '</div>';
-        if (c.asisCategory) html += '<div class="card-asis">' + c.asisCategory + '</div>';
-        if (c.url) html += '<a href="' + c.url + '" target="_blank" class="card-url">' + c.url.substring(0,40) + '...</a>';
-        
-        if (isDone) {
-            html += '<div class="card-locations">';
-            for (var j = 0; j < c.locations.length; j++) {
-                var l = c.locations[j];
-                var lbl = (l.sotto || l.macro || "").substring(0,15);
-                html += '<span class="location-tag">' + lbl + '<span class="remove-loc" data-card="' + id + '" data-macro="' + l.macroId + '" data-sotto="' + l.sottoId + '" data-terzo="' + (l.terzoId || "") + '">&times;</span></span>';
+        if (c.children) {
+            for (var j = 0; j < c.children.length; j++) {
+                children.push(c.children[j]);
             }
-            html += '</div>';
         }
-        html += '</div>';
     }
-    
-    container.innerHTML = html;
+    return children;
 }
 
-// ===== RENDER MACROS =====
-function renderMacros() {
-    var container = document.getElementById("macroContainer");
-    var html = "";
-    
-    for (var i = 0; i < structureData.macroAreas.length; i++) {
-        var m = structureData.macroAreas[i];
-        var cnt = countMacroCards(m.id);
-        
-        html += '<div class="macro-area" id="macro-' + m.id + '" data-macro-id="' + m.id + '">';
-        html += '<div class="macro-header ' + gradients[i % 9] + '" data-toggle="' + m.id + '">';
-        html += '<div class="macro-title"><span class="macro-icon">' + (m.icon || icons[i % icons.length]) + '</span>';
-        html += '<input type="text" class="macro-name-input" value="' + m.name + '" data-macro-name="' + m.id + '">';
-        html += '<span class="macro-badge">' + cnt + '</span></div>';
-        html += '<div class="macro-actions"><button data-toggle="' + m.id + '">▼</button>';
-        html += '<button data-delete-macro="' + m.id + '">🗑️</button></div></div>';
-        html += '<div class="macro-content">';
-        
-        var sottos = m.sottoCategorie || [];
-        for (var j = 0; j < sottos.length; j++) {
-            html += renderSotto(m.id, sottos[j]);
-        }
-        
-        html += '<button class="add-btn" data-add-sotto="' + m.id + '">+ Sotto-categoria</button>';
-        html += '</div></div>';
-    }
-    
-    container.innerHTML = html;
-}
-
-function renderSotto(macroId, sotto) {
-    var cards = getCardsInSotto(macroId, sotto.id);
-    var html = '<div class="sotto-cat" data-macro-id="' + macroId + '" data-sotto-id="' + sotto.id + '">';
-    html += '<div class="sotto-header"><input type="text" class="sotto-name-input" value="' + sotto.name + '" data-sotto-name="' + macroId + '|' + sotto.id + '">';
-    html += '<div style="display:flex;gap:4px;align-items:center"><span class="sotto-count">' + cards.length + '</span>';
-    html += '<button class="delete-btn" data-delete-sotto="' + macroId + '|' + sotto.id + '">🗑️</button></div></div>';
-    html += '<div class="sotto-cards">';
-    
-    for (var i = 0; i < cards.length; i++) {
-        html += renderSottoCard(cards[i], macroId, sotto.id, null, false);
-    }
-    if (cards.length === 0) html += '<span style="color:#94a3b8;font-size:9px">Trascina schede qui</span>';
-    html += '</div>';
-    
-    if (sotto.terzoLivello && sotto.terzoLivello.length > 0) {
-        html += '<div class="terzo-container">';
-        for (var i = 0; i < sotto.terzoLivello.length; i++) {
-            html += renderTerzo(macroId, sotto.id, sotto.terzoLivello[i]);
-        }
-        html += '</div>';
-    }
-    
-    html += '<div style="padding:4px"><button class="add-btn" data-add-terzo="' + macroId + '|' + sotto.id + '" style="font-size:9px">+ 3° livello</button></div>';
-    html += '</div>';
-    return html;
-}
-
-function renderTerzo(macroId, sottoId, terzo) {
-    var cards = getCardsInTerzo(macroId, sottoId, terzo.id);
-    var html = '<div class="sotto-cat" data-macro-id="' + macroId + '" data-sotto-id="' + sottoId + '" data-terzo-id="' + terzo.id + '" style="margin:4px 0;background:#f1f5f9">';
-    html += '<div class="sotto-header" style="padding:6px 8px"><input type="text" class="sotto-name-input" value="' + terzo.name + '" style="font-size:11px" data-terzo-name="' + macroId + '|' + sottoId + '|' + terzo.id + '">';
-    html += '<div style="display:flex;gap:4px;align-items:center"><span class="sotto-count">' + cards.length + '</span>';
-    html += '<button class="delete-btn" data-delete-terzo="' + macroId + '|' + sottoId + '|' + terzo.id + '">🗑️</button></div></div>';
-    html += '<div class="sotto-cards">';
-    for (var i = 0; i < cards.length; i++) {
-        html += renderSottoCard(cards[i], macroId, sottoId, terzo.id, false);
-    }
-    if (cards.length === 0) html += '<span style="color:#94a3b8;font-size:8px">Trascina qui</span>';
-    html += '</div></div>';
-    return html;
-}
-
-function renderSottoCard(cardId, macroId, sottoId, terzoId, isChild) {
+function isCardAssigned(cardId) {
     var c = cardsData[cardId];
-    if (!c) return "";
-    var lbl = (c.altLabel || c.label).substring(0, 32);
-    if ((c.altLabel || c.label).length > 32) lbl += "...";
-    var hasChildren = c.children && c.children.length > 0;
-    var html = '<div class="sotto-card' + (hasChildren ? ' is-group' : '') + '" draggable="true" data-card-id="' + cardId + '" data-from-macro="' + macroId + '" data-from-sotto="' + sottoId + '"';
-    if (terzoId) html += ' data-from-terzo="' + terzoId + '"';
-    if (isChild) html += ' data-is-child="true"';
-    html += '>';
-    // Header con ID, badge gruppo, pulsanti
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:2px">';
-    html += '<span style="font-size:7px;color:#94a3b8">ID ' + cardId + '</span>';
-    if (hasChildren) html += '<span class="group-badge">' + c.children.length + '</span>';
-    html += '<span style="display:flex;gap:2px">';
-    html += '<span class="dup-sotto-btn" data-dup-sotto="' + cardId + '" title="Duplica">+</span>';
-    html += '<span class="edit-sotto-card" data-edit-sotto="' + cardId + '" title="Dettaglio">✏️</span>';
-    html += '</span></div>';
-    // Label
-    html += '<div style="font-size:9px;color:#1e293b;line-height:1.2;margin-top:2px">' + lbl + '</div>';
-    // Pulsante rimuovi (o sgancia se è child)
-    if (isChild) {
-        html += '<div class="remove-card" data-ungroup="' + cardId + '" title="Sgancia dal gruppo">&times;</div>';
-    } else {
-        html += '<div class="remove-card" data-remove-card="' + cardId + '|' + macroId + '|' + sottoId + '|' + (terzoId || '') + '">&times;</div>';
-    }
-    html += '</div>';
-    // Render children se presenti
-    if (hasChildren && !isChild) {
-        html += '<div class="card-group">';
-        for (var i = 0; i < c.children.length; i++) {
-            html += renderSottoCard(c.children[i], macroId, sottoId, terzoId, true);
-        }
-        html += '</div>';
-    }
-    return html;
+    if (!c) return false;
+    // Check if it's a child of another card
+    var childIds = getAllChildIds();
+    if (childIds.indexOf(cardId) !== -1) return true;
+    // Check if has locations
+    return c.locations && c.locations.length > 0;
 }
 
-// ===== HELPERS =====
 function getCardsInSotto(macroId, sottoId) {
     var result = [];
     var childIds = getAllChildIds();
     var keys = Object.keys(cardsData);
     for (var i = 0; i < keys.length; i++) {
-        // Escludi card che sono children di altre
         if (childIds.indexOf(keys[i]) !== -1) continue;
         var c = cardsData[keys[i]];
         if (c.locations) {
@@ -609,20 +494,6 @@ function getCardsInSotto(macroId, sottoId) {
         }
     }
     return result;
-}
-
-function getAllChildIds() {
-    var children = [];
-    var keys = Object.keys(cardsData);
-    for (var i = 0; i < keys.length; i++) {
-        var c = cardsData[keys[i]];
-        if (c.children) {
-            for (var j = 0; j < c.children.length; j++) {
-                children.push(c.children[j]);
-            }
-        }
-    }
-    return children;
 }
 
 function getCardsInTerzo(macroId, sottoId, terzoId) {
@@ -662,15 +533,243 @@ function countMacroCards(macroId) {
     return count;
 }
 
+// ===== RENDER NAV CHIPS =====
+function renderNavChips() {
+    var nav = document.getElementById("navBar");
+    var chips = nav.querySelectorAll(".nav-chip");
+    for (var i = 0; i < chips.length; i++) chips[i].remove();
+    
+    var actions = nav.querySelector(".nav-actions");
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        var m = structureData.macroAreas[i];
+        var cnt = countMacroCards(m.id);
+        var chip = document.createElement("div");
+        chip.className = "nav-chip chip-" + ((i % 9) + 1);
+        chip.innerHTML = "<span>" + (m.icon || icons[i % icons.length]) + "</span><span>" + (m.name.length > 18 ? m.name.substring(0,18) + "..." : m.name) + "</span><span class='chip-count'>" + cnt + "</span>";
+        chip.setAttribute("data-macro-id", m.id);
+        chip.onclick = (function(id) { return function() { scrollToMacro(id); }; })(m.id);
+        nav.insertBefore(chip, actions);
+    }
+}
+
+function scrollToMacro(id) {
+    var el = document.getElementById("macro-" + id);
+    if (el) {
+        el.classList.remove("collapsed");
+        el.scrollIntoView({behavior: "smooth", block: "start"});
+        el.style.boxShadow = "0 0 0 4px #3b82f6";
+        setTimeout(function() { el.style.boxShadow = ""; }, 2000);
+    }
+}
+
+function toggleAll(expand) {
+    var macros = document.querySelectorAll(".macro-area");
+    var sottos = document.querySelectorAll(".sotto-cat");
+    for (var i = 0; i < macros.length; i++) {
+        if (expand) macros[i].classList.remove("collapsed");
+        else macros[i].classList.add("collapsed");
+    }
+    for (var i = 0; i < sottos.length; i++) {
+        if (expand) sottos[i].classList.remove("collapsed");
+        else sottos[i].classList.add("collapsed");
+    }
+}
+
+// ===== RENDER CARDS =====
+function renderCards() {
+    var container = document.getElementById("cardsContainer");
+    var search = document.getElementById("searchBox").value.toLowerCase();
+    var asisVal = document.getElementById("asisFilter").value;
+    
+    var keys = Object.keys(cardsData);
+    var filtered = [];
+    var totalTodo = 0;
+    var totalDone = 0;
+    
+    for (var i = 0; i < keys.length; i++) {
+        var id = keys[i];
+        var c = cardsData[id];
+        var done = isCardAssigned(id);
+        
+        if (done) totalDone++; else totalTodo++;
+        
+        // Filter
+        var txt = (c.label + " " + (c.altLabel || "") + " " + id + " " + (c.originalMacro || "")).toLowerCase();
+        if (search && txt.indexOf(search) === -1) continue;
+        if (asisVal && c.asisCategory !== asisVal) continue;
+        if (currentFilter === "done" && !done) continue;
+        if (currentFilter === "todo" && done) continue;
+        
+        filtered.push({id: id, card: c, done: done});
+    }
+    
+    filtered.sort(function(a, b) {
+        return parseInt(a.id) - parseInt(b.id);
+    });
+    
+    // Update stats
+    document.getElementById("statTodo").textContent = totalTodo;
+    document.getElementById("statDone").textContent = totalDone;
+    document.getElementById("statTotal").textContent = keys.length;
+    
+    var html = "";
+    for (var i = 0; i < filtered.length; i++) {
+        var id = filtered[i].id;
+        var c = filtered[i].card;
+        var isDone = filtered[i].done;
+        var isMulti = c.locations && c.locations.length > 1;
+        
+        html += '<div class="card-item ' + (isDone ? 'assigned ' : '') + (isMulti ? 'multi-assigned' : '') + '" draggable="true" data-card-id="' + id + '">';
+        html += '<div class="card-header"><span class="card-id">ID ' + id + '</span>';
+        html += '<div class="card-menu"><button class="card-menu-btn" data-menu-toggle="' + id + '">⋮</button>';
+        html += '<div class="card-menu-dropdown" id="menu-' + id + '">';
+        html += '<button data-action="duplicate" data-card="' + id + '">➕ Duplica</button>';
+        if (isDone) html += '<button class="danger" data-action="remove-all" data-card="' + id + '">🗑️ Rimuovi da tutte</button>';
+        html += '</div></div></div>';
+        html += '<div class="card-label" data-open-card="' + id + '">' + (c.altLabel || c.label) + '</div>';
+        if (c.asisCategory) html += '<div class="card-asis">' + c.asisCategory + '</div>';
+        if (c.url) html += '<a href="' + c.url + '" target="_blank" class="card-url" onclick="event.stopPropagation()">' + c.url.substring(0,50) + '...</a>';
+        
+        if (isDone && c.locations && c.locations.length > 0) {
+            html += '<div class="card-locations">';
+            for (var j = 0; j < c.locations.length; j++) {
+                var l = c.locations[j];
+                html += '<span class="location-tag">' + (l.sotto || l.macro || "").substring(0,20) + '<span class="remove-loc" data-remove-loc="' + id + '|' + l.macroId + '|' + l.sottoId + '|' + (l.terzoId || '') + '">&times;</span></span>';
+            }
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    
+    if (filtered.length === 0) {
+        html = '<div style="text-align:center;padding:40px;color:#64748b"><p style="font-size:40px;margin-bottom:12px">✅</p><p>Nessuna scheda da mostrare</p></div>';
+    }
+    
+    container.innerHTML = html;
+}
+
+// ===== RENDER MACROS =====
+function renderMacros() {
+    var container = document.getElementById("macroContainer");
+    var html = "";
+    
+    for (var i = 0; i < structureData.macroAreas.length; i++) {
+        var m = structureData.macroAreas[i];
+        var cnt = countMacroCards(m.id);
+        
+        html += '<div class="macro-area" id="macro-' + m.id + '" data-macro-id="' + m.id + '">';
+        html += '<div class="macro-header ' + gradients[i % 9] + '" data-toggle-macro="' + m.id + '">';
+        html += '<div class="macro-title"><span class="macro-icon">' + (m.icon || icons[i % icons.length]) + '</span>';
+        html += '<span class="macro-name">' + m.name + '</span>';
+        html += '<span class="macro-badge">' + cnt + ' schede</span></div>';
+        html += '</div>';
+        html += '<div class="macro-content">';
+        
+        var sottos = m.sottoCategorie || [];
+        for (var j = 0; j < sottos.length; j++) {
+            html += renderSotto(m.id, sottos[j]);
+        }
+        
+        html += '<button class="add-btn" data-add-sotto="' + m.id + '">+ Sotto-categoria</button>';
+        html += '</div></div>';
+    }
+    
+    container.innerHTML = html;
+}
+
+function renderSotto(macroId, sotto) {
+    var cards = getCardsInSotto(macroId, sotto.id);
+    var html = '<div class="sotto-cat" data-macro-id="' + macroId + '" data-sotto-id="' + sotto.id + '">';
+    html += '<div class="sotto-header" data-toggle-sotto="' + sotto.id + '">';
+    html += '<span class="sotto-name">' + sotto.name + '</span>';
+    html += '<span class="sotto-count">' + cards.length + '</span></div>';
+    html += '<div class="sotto-cards">';
+    
+    for (var i = 0; i < cards.length; i++) {
+        html += renderSottoCard(cards[i], macroId, sotto.id, null, false);
+    }
+    if (cards.length === 0) html += '<span style="color:#94a3b8;font-size:13px;padding:8px">Trascina qui le schede</span>';
+    html += '</div>';
+    
+    if (sotto.terzoLivello && sotto.terzoLivello.length > 0) {
+        html += '<div class="terzo-container">';
+        for (var i = 0; i < sotto.terzoLivello.length; i++) {
+            html += renderTerzo(macroId, sotto.id, sotto.terzoLivello[i]);
+        }
+        html += '</div>';
+    }
+    
+    html += '<div style="padding:8px"><button class="add-btn" data-add-terzo="' + macroId + '|' + sotto.id + '" style="font-size:12px">+ 3° livello</button></div>';
+    html += '</div>';
+    return html;
+}
+
+function renderTerzo(macroId, sottoId, terzo) {
+    var cards = getCardsInTerzo(macroId, sottoId, terzo.id);
+    var html = '<div class="sotto-cat" data-macro-id="' + macroId + '" data-sotto-id="' + sottoId + '" data-terzo-id="' + terzo.id + '" style="margin:8px 0;background:#f1f5f9">';
+    html += '<div class="sotto-header" data-toggle-sotto="' + terzo.id + '" style="padding:10px 14px">';
+    html += '<span class="sotto-name" style="font-size:13px">' + terzo.name + '</span>';
+    html += '<span class="sotto-count">' + cards.length + '</span></div>';
+    html += '<div class="sotto-cards">';
+    for (var i = 0; i < cards.length; i++) {
+        html += renderSottoCard(cards[i], macroId, sottoId, terzo.id, false);
+    }
+    if (cards.length === 0) html += '<span style="color:#94a3b8;font-size:12px;padding:6px">Trascina qui</span>';
+    html += '</div></div>';
+    return html;
+}
+
+function renderSottoCard(cardId, macroId, sottoId, terzoId, isChild) {
+    var c = cardsData[cardId];
+    if (!c) return "";
+    var lbl = (c.altLabel || c.label);
+    if (lbl.length > 40) lbl = lbl.substring(0, 40) + "...";
+    var hasChildren = c.children && c.children.length > 0;
+    
+    var html = '<div class="sotto-card' + (hasChildren ? ' is-group' : '') + '" draggable="true" data-card-id="' + cardId + '" data-from-macro="' + macroId + '" data-from-sotto="' + sottoId + '"';
+    if (terzoId) html += ' data-from-terzo="' + terzoId + '"';
+    if (isChild) html += ' data-is-child="true"';
+    html += '>';
+    
+    html += '<div class="card-header"><span class="card-id">ID ' + cardId + '</span>';
+    if (hasChildren) html += '<span class="group-badge">' + c.children.length + '</span>';
+    html += '<button class="card-menu-btn" data-menu-toggle="sotto-' + cardId + '">⋮</button></div>';
+    
+    // Menu dropdown
+    html += '<div class="card-menu-dropdown" id="menu-sotto-' + cardId + '">';
+    html += '<button data-action="duplicate" data-card="' + cardId + '">➕ Duplica</button>';
+    if (isChild) {
+        html += '<button data-action="ungroup" data-card="' + cardId + '">↩️ Sgancia</button>';
+    } else {
+        html += '<button class="danger" data-action="remove" data-card="' + cardId + '" data-macro="' + macroId + '" data-sotto="' + sottoId + '" data-terzo="' + (terzoId || '') + '">🗑️ Rimuovi</button>';
+    }
+    html += '</div>';
+    
+    html += '<div class="card-label" data-open-card="' + cardId + '">' + lbl + '</div>';
+    html += '</div>';
+    
+    // Render children
+    if (hasChildren && !isChild) {
+        html += '<div class="card-group">';
+        for (var i = 0; i < c.children.length; i++) {
+            html += renderSottoCard(c.children[i], macroId, sottoId, terzoId, true);
+        }
+        html += '</div>';
+    }
+    
+    return html;
+}
+
 // ===== CARD OPERATIONS =====
 function addCardToLoc(cardId, macroId, sottoId, terzoId) {
     if (!cardsData[cardId]) return;
     if (!cardsData[cardId].locations) cardsData[cardId].locations = [];
     
+    // Check duplicate
     for (var i = 0; i < cardsData[cardId].locations.length; i++) {
         var l = cardsData[cardId].locations[i];
         if (l.macroId === macroId && l.sottoId === sottoId && l.terzoId === terzoId) {
-            showToast("Già presente", "info");
+            showToast("Già presente qui", "info");
             return;
         }
     }
@@ -711,7 +810,7 @@ function addCardToLoc(cardId, macroId, sottoId, terzoId) {
     
     saveData();
     renderAll();
-    showToast("Aggiunta", "success");
+    showToast("Aggiunta a " + (sotto ? sotto.name : ""), "success");
 }
 
 function removeLoc(cardId, macroId, sottoId, terzoId) {
@@ -724,7 +823,6 @@ function removeLoc(cardId, macroId, sottoId, terzoId) {
         return !(l.macroId === macroId && l.sottoId === sottoId && !l.terzoId);
     });
     
-    // Rimuovi anche eventuali children
     if (cardsData[cardId].children) {
         cardsData[cardId].children = [];
     }
@@ -734,39 +832,53 @@ function removeLoc(cardId, macroId, sottoId, terzoId) {
     showToast("Rimossa", "info");
 }
 
+function removeAllLocs(cardId) {
+    if (!cardsData[cardId]) return;
+    cardsData[cardId].locations = [];
+    if (cardsData[cardId].children) cardsData[cardId].children = [];
+    saveData();
+    renderAll();
+    showToast("Rimossa da tutte le categorie", "info");
+}
+
+function duplicateCard(cardId) {
+    var orig = cardsData[cardId];
+    if (!orig) return;
+    var newId = "dup_" + cardId + "_" + Date.now();
+    cardsData[newId] = JSON.parse(JSON.stringify(orig));
+    cardsData[newId].label = orig.label + " (copia)";
+    cardsData[newId].locations = [];
+    cardsData[newId].children = [];
+    cardsData[newId].lastModifiedBy = currentUser ? currentUser.name : "";
+    cardsData[newId].lastModified = new Date().toISOString();
+    saveData();
+    renderAll();
+    showToast("Duplicata: " + newId, "success");
+}
+
 function groupCards(parentId, childId) {
     if (parentId === childId) return;
     if (!cardsData[parentId] || !cardsData[childId]) return;
     
-    // Inizializza children se non esiste
-    if (!cardsData[parentId].children) {
-        cardsData[parentId].children = [];
-    }
-    
-    // Evita duplicati
+    if (!cardsData[parentId].children) cardsData[parentId].children = [];
     if (cardsData[parentId].children.indexOf(childId) !== -1) {
         showToast("Già nel gruppo", "info");
         return;
     }
     
-    // Rimuovi child da altri gruppi
+    // Remove from other groups
     var keys = Object.keys(cardsData);
     for (var i = 0; i < keys.length; i++) {
         var c = cardsData[keys[i]];
         if (c.children) {
             var idx = c.children.indexOf(childId);
-            if (idx !== -1) {
-                c.children.splice(idx, 1);
-            }
+            if (idx !== -1) c.children.splice(idx, 1);
         }
     }
     
-    // Rimuovi child dalle locations (sarà visibile sotto il parent)
-    if (cardsData[childId].locations) {
-        cardsData[childId].locations = [];
-    }
+    // Remove locations
+    if (cardsData[childId].locations) cardsData[childId].locations = [];
     
-    // Aggiungi al gruppo
     cardsData[parentId].children.push(childId);
     cardsData[parentId].lastModifiedBy = currentUser ? currentUser.name : "";
     cardsData[parentId].lastModified = new Date().toISOString();
@@ -777,7 +889,6 @@ function groupCards(parentId, childId) {
 }
 
 function ungroupCard(childId) {
-    // Trova il parent
     var keys = Object.keys(cardsData);
     for (var i = 0; i < keys.length; i++) {
         var c = cardsData[keys[i]];
@@ -785,12 +896,9 @@ function ungroupCard(childId) {
             var idx = c.children.indexOf(childId);
             if (idx !== -1) {
                 c.children.splice(idx, 1);
-                
-                // Copia le locations dal parent al child
                 if (c.locations && c.locations.length > 0) {
                     cardsData[childId].locations = JSON.parse(JSON.stringify(c.locations));
                 }
-                
                 saveData();
                 renderAll();
                 showToast("Sganciata dal gruppo", "info");
@@ -800,35 +908,24 @@ function ungroupCard(childId) {
     }
 }
 
-function duplicateCard(cardId) {
-    var orig = cardsData[cardId];
-    if (!orig) return;
-    var newId = "dup_" + cardId + "_" + Date.now();
-    cardsData[newId] = JSON.parse(JSON.stringify(orig));
-    cardsData[newId].label = orig.label + " (copia)";
-    cardsData[newId].locations = [];
-    cardsData[newId].lastModifiedBy = currentUser ? currentUser.name : "";
-    cardsData[newId].lastModified = new Date().toISOString();
-    saveData();
-    renderAll();
-    showToast("Duplicata: " + newId, "success");
-}
-
 // ===== CARD MODAL =====
 function openCardModal(cardId) {
     selectedCardId = cardId;
     var c = cardsData[cardId];
-    var html = '<div style="margin-bottom:10px"><label class="modal-label">ID</label><div style="font-weight:600">' + cardId + '</div></div>';
-    html += '<div style="margin-bottom:10px"><label class="modal-label">Label originale</label><div style="font-size:12px">' + c.label + '</div></div>';
-    if (c.asisCategory) html += '<div style="margin-bottom:10px"><label class="modal-label">Categoria ASIS</label><div style="background:#dbeafe;padding:4px 8px;border-radius:4px;font-size:11px;color:#1e40af;display:inline-block">' + c.asisCategory + '</div></div>';
-    if (c.url) html += '<div style="margin-bottom:10px"><label class="modal-label">URL</label><a href="' + c.url + '" target="_blank" style="font-size:11px;color:#3b82f6">' + c.url + '</a></div>';
-    html += '<div style="margin-bottom:10px"><label class="modal-label">Label alternativa</label><input type="text" id="inp_altLabel" class="modal-input" value="' + (c.altLabel || '') + '" placeholder="Nuova label..."></div>';
-    html += '<div style="margin-bottom:10px"><label class="modal-label">Abstract (max 200)</label><textarea id="inp_abstract" class="modal-input" rows="2" maxlength="200">' + (c.abstract || '') + '</textarea></div>';
-    html += '<div class="modal-row"><div style="flex:1"><label class="modal-label">Target</label><input type="text" id="inp_target" class="modal-input" value="' + (c.targetUser || '') + '"></div>';
-    html += '<div style="flex:1"><label class="modal-label">User Need</label><input type="text" id="inp_need" class="modal-input" value="' + (c.userNeed || '') + '"></div></div>';
-    html += '<div style="margin-bottom:10px"><label class="modal-label">Use Case</label><input type="text" id="inp_usecase" class="modal-input" value="' + (c.useCase || '') + '"></div>';
-    html += '<div style="margin-bottom:10px"><label class="modal-label">Note</label><textarea id="inp_notes" class="modal-input" rows="2">' + (c.notes || '') + '</textarea></div>';
-    if (c.lastModifiedBy) html += '<div style="font-size:9px;color:#94a3b8">Ultima modifica: ' + c.lastModifiedBy + '</div>';
+    
+    var html = '<div class="modal-section"><div class="modal-label">ID Scheda</div><div class="modal-value">' + cardId + '</div></div>';
+    html += '<div class="modal-section"><div class="modal-label">Nome originale</div><div class="modal-value">' + c.label + '</div></div>';
+    if (c.asisCategory) html += '<div class="modal-section"><div class="modal-label">Categoria AS-IS</div><div class="modal-value asis">' + c.asisCategory + '</div></div>';
+    if (c.url) html += '<div class="modal-section"><div class="modal-label">URL</div><div class="modal-value"><a href="' + c.url + '" target="_blank" style="color:#3b82f6">' + c.url + '</a></div></div>';
+    
+    html += '<div class="modal-section"><div class="modal-label">Label alternativa</div><input type="text" id="inp_altLabel" class="modal-input" value="' + (c.altLabel || '') + '" placeholder="Nuova denominazione..."></div>';
+    html += '<div class="modal-section"><div class="modal-label">Abstract (max 200 car.)</div><textarea id="inp_abstract" class="modal-input" rows="2" maxlength="200" placeholder="Breve descrizione...">' + (c.abstract || '') + '</textarea></div>';
+    html += '<div class="modal-row"><div class="modal-section"><div class="modal-label">Target</div><input type="text" id="inp_target" class="modal-input" value="' + (c.targetUser || '') + '" placeholder="A chi è rivolto..."></div>';
+    html += '<div class="modal-section"><div class="modal-label">User Need</div><input type="text" id="inp_need" class="modal-input" value="' + (c.userNeed || '') + '" placeholder="Bisogno utente..."></div></div>';
+    html += '<div class="modal-section"><div class="modal-label">Use Case</div><input type="text" id="inp_usecase" class="modal-input" value="' + (c.useCase || '') + '" placeholder="Caso d\'uso..."></div>';
+    html += '<div class="modal-section"><div class="modal-label">Note</div><textarea id="inp_notes" class="modal-input" rows="2" placeholder="Note...">' + (c.notes || '') + '</textarea></div>';
+    
+    if (c.lastModifiedBy) html += '<div style="font-size:11px;color:#94a3b8;margin-top:12px">Ultima modifica: ' + c.lastModifiedBy + ' - ' + new Date(c.lastModified).toLocaleString("it-IT") + '</div>';
     
     document.getElementById("cardModalContent").innerHTML = html;
     document.getElementById("cardModal").classList.add("active");
@@ -853,7 +950,7 @@ function saveCardDetail() {
     saveData();
     renderAll();
     closeCardModal();
-    showToast("Salvata", "success");
+    showToast("Modifiche salvate", "success");
 }
 
 // ===== STRUCTURE =====
@@ -867,7 +964,7 @@ function addMacroTop() {
     });
     saveData();
     renderAll();
-    showToast("Aggiunta in alto", "success");
+    showToast("Macro-area aggiunta", "success");
     scrollToMacro(newId);
 }
 
@@ -882,47 +979,7 @@ function addMacroBottom() {
     });
     saveData();
     renderAll();
-    showToast("Aggiunta", "success");
-}
-
-function deleteMacro(macroId) {
-    showConfirm("Elimina macro-area?", "Le schede verranno rimosse.", function() {
-        var keys = Object.keys(cardsData);
-        for (var i = 0; i < keys.length; i++) {
-            if (cardsData[keys[i]].locations) {
-                cardsData[keys[i]].locations = cardsData[keys[i]].locations.filter(function(l) {
-                    return l.macroId !== macroId;
-                });
-            }
-        }
-        structureData.macroAreas = structureData.macroAreas.filter(function(m) {
-            return m.id !== macroId;
-        });
-        saveData();
-        renderAll();
-        showToast("Eliminata", "info");
-    });
-}
-
-function updateMacroName(macroId, name) {
-    for (var i = 0; i < structureData.macroAreas.length; i++) {
-        if (structureData.macroAreas[i].id === macroId) {
-            structureData.macroAreas[i].name = name;
-            break;
-        }
-    }
-    var keys = Object.keys(cardsData);
-    for (var i = 0; i < keys.length; i++) {
-        if (cardsData[keys[i]].locations) {
-            for (var j = 0; j < cardsData[keys[i]].locations.length; j++) {
-                if (cardsData[keys[i]].locations[j].macroId === macroId) {
-                    cardsData[keys[i]].locations[j].macro = name;
-                }
-            }
-        }
-    }
-    saveData();
-    renderNavChips();
+    showToast("Macro-area aggiunta", "success");
 }
 
 function addSotto(macroId) {
@@ -935,31 +992,7 @@ function addSotto(macroId) {
     }
     saveData();
     renderMacros();
-    showToast("Aggiunta", "success");
-}
-
-function deleteSotto(macroId, sottoId) {
-    showConfirm("Elimina sotto-categoria?", "", function() {
-        for (var i = 0; i < structureData.macroAreas.length; i++) {
-            if (structureData.macroAreas[i].id === macroId) {
-                structureData.macroAreas[i].sottoCategorie = structureData.macroAreas[i].sottoCategorie.filter(function(s) {
-                    return s.id !== sottoId;
-                });
-                break;
-            }
-        }
-        var keys = Object.keys(cardsData);
-        for (var i = 0; i < keys.length; i++) {
-            if (cardsData[keys[i]].locations) {
-                cardsData[keys[i]].locations = cardsData[keys[i]].locations.filter(function(l) {
-                    return !(l.macroId === macroId && l.sottoId === sottoId);
-                });
-            }
-        }
-        saveData();
-        renderAll();
-        showToast("Eliminata", "info");
-    });
+    showToast("Sotto-categoria aggiunta", "success");
 }
 
 function addTerzo(macroId, sottoId) {
@@ -978,37 +1011,7 @@ function addTerzo(macroId, sottoId) {
     }
     saveData();
     renderMacros();
-    showToast("Aggiunto", "success");
-}
-
-function deleteTerzo(macroId, sottoId, terzoId) {
-    showConfirm("Elimina 3° livello?", "", function() {
-        for (var i = 0; i < structureData.macroAreas.length; i++) {
-            if (structureData.macroAreas[i].id === macroId) {
-                var sottos = structureData.macroAreas[i].sottoCategorie || [];
-                for (var j = 0; j < sottos.length; j++) {
-                    if (sottos[j].id === sottoId && sottos[j].terzoLivello) {
-                        sottos[j].terzoLivello = sottos[j].terzoLivello.filter(function(t) {
-                            return t.id !== terzoId;
-                        });
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-        var keys = Object.keys(cardsData);
-        for (var i = 0; i < keys.length; i++) {
-            if (cardsData[keys[i]].locations) {
-                cardsData[keys[i]].locations = cardsData[keys[i]].locations.filter(function(l) {
-                    return !(l.macroId === macroId && l.sottoId === sottoId && l.terzoId === terzoId);
-                });
-            }
-        }
-        saveData();
-        renderAll();
-        showToast("Eliminato", "info");
-    });
+    showToast("3° livello aggiunto", "success");
 }
 
 // ===== SESSIONS =====
@@ -1022,26 +1025,26 @@ function closeAdminModal() {
 }
 
 function getSessions() {
-    return JSON.parse(localStorage.getItem("cs_sessions") || "[]");
+    return JSON.parse(localStorage.getItem("cs_sessions_v9") || "[]");
 }
 
 function saveSessions(sessions) {
-    localStorage.setItem("cs_sessions", JSON.stringify(sessions));
+    localStorage.setItem("cs_sessions_v9", JSON.stringify(sessions));
 }
 
 function renderSessionList() {
     var sessions = getSessions();
     var list = document.getElementById("sessionList");
     if (sessions.length === 0) {
-        list.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:11px">Nessuna sessione</div>';
+        list.innerHTML = '<div style="padding:24px;text-align:center;color:#94a3b8;font-size:13px">Nessuna sessione salvata</div>';
         return;
     }
     var html = "";
     for (var i = 0; i < sessions.length; i++) {
         var s = sessions[i];
         html += '<div class="session-item"><div><div class="session-name">' + s.name + '</div>';
-        html += '<div class="session-meta">' + new Date(s.date).toLocaleString("it-IT") + '</div></div>';
-        html += '<div style="display:flex;gap:4px"><button class="btn btn-primary" data-load-session="' + i + '">Carica</button>';
+        html += '<div class="session-meta">' + new Date(s.date).toLocaleString("it-IT") + ' - ' + s.cardCount + ' schede</div></div>';
+        html += '<div style="display:flex;gap:6px"><button class="btn btn-primary" data-load-session="' + i + '">Carica</button>';
         html += '<button class="btn btn-danger" data-delete-session="' + i + '">🗑️</button></div></div>';
     }
     list.innerHTML = html;
@@ -1071,7 +1074,7 @@ function loadSession(idx) {
     var sessions = getSessions();
     var s = sessions[idx];
     if (!s) return;
-    showConfirm("Caricare " + s.name + "?", "I dati correnti verranno sostituiti.", function() {
+    showConfirm("Caricare '" + s.name + "'?", "I dati correnti verranno sostituiti.", function() {
         cardsData = s.cards;
         structureData = s.structure;
         saveData();
@@ -1082,29 +1085,40 @@ function loadSession(idx) {
 }
 
 function deleteSession(idx) {
-    showConfirm("Eliminare sessione?", "", function() {
+    showConfirm("Eliminare questa sessione?", "", function() {
         var sessions = getSessions();
         sessions.splice(idx, 1);
         saveSessions(sessions);
         renderSessionList();
-        showToast("Eliminata", "info");
+        showToast("Sessione eliminata", "info");
     });
 }
 
 // ===== EXPORT/IMPORT =====
 function exportSession() {
-    var rows = [["ID","URL","Label Originale","Label Proposta","Categoria ASIS","Abstract","Target","User Need","Use Case","Nuova Macro","Nuova Sotto","3 Livello","Note","Modificato da","Data"]];
+    var rows = [["ID","URL","Label Originale","Label Proposta","Categoria AS-IS","Abstract","Target","User Need","Use Case","Nuova Macro","Nuova Sotto","3 Livello","Gruppo Parent","Note","Modificato da","Data"]];
     var keys = Object.keys(cardsData);
     for (var i = 0; i < keys.length; i++) {
         var id = keys[i];
         var c = cardsData[id];
+        
+        // Find if this card is a child
+        var parentId = "";
+        for (var j = 0; j < keys.length; j++) {
+            var pc = cardsData[keys[j]];
+            if (pc.children && pc.children.indexOf(id) !== -1) {
+                parentId = keys[j];
+                break;
+            }
+        }
+        
         if (c.locations && c.locations.length > 0) {
             for (var j = 0; j < c.locations.length; j++) {
                 var l = c.locations[j];
-                rows.push([id, c.url||"", c.label, c.altLabel||"", c.asisCategory||"", c.abstract||"", c.targetUser||"", c.userNeed||"", c.useCase||"", l.macro||"", l.sotto||"", l.terzo||"", c.notes||"", c.lastModifiedBy||"", c.lastModified ? new Date(c.lastModified).toLocaleString("it-IT") : ""]);
+                rows.push([id, c.url||"", c.label, c.altLabel||"", c.asisCategory||"", c.abstract||"", c.targetUser||"", c.userNeed||"", c.useCase||"", l.macro||"", l.sotto||"", l.terzo||"", parentId, c.notes||"", c.lastModifiedBy||"", c.lastModified ? new Date(c.lastModified).toLocaleString("it-IT") : ""]);
             }
         } else {
-            rows.push([id, c.url||"", c.label, c.altLabel||"", c.asisCategory||"", c.abstract||"", c.targetUser||"", c.userNeed||"", c.useCase||"", "", "", "", c.notes||"", c.lastModifiedBy||"", c.lastModified ? new Date(c.lastModified).toLocaleString("it-IT") : ""]);
+            rows.push([id, c.url||"", c.label, c.altLabel||"", c.asisCategory||"", c.abstract||"", c.targetUser||"", c.userNeed||"", c.useCase||"", "", "", "", parentId, c.notes||"", c.lastModifiedBy||"", c.lastModified ? new Date(c.lastModified).toLocaleString("it-IT") : ""]);
         }
     }
     var ws = XLSX.utils.aoa_to_sheet(rows);
@@ -1122,44 +1136,215 @@ function importSession(file) {
             var ws = wb.Sheets[wb.SheetNames[0]];
             var data = XLSX.utils.sheet_to_json(ws, {header: 1});
             var headers = data[0];
-            var idIdx = headers.indexOf("ID");
-            var altIdx = headers.indexOf("Label Proposta");
-            var absIdx = headers.indexOf("Abstract");
-            var targetIdx = headers.indexOf("Target");
-            var needIdx = headers.indexOf("User Need");
-            var useIdx = headers.indexOf("Use Case");
-            var notesIdx = headers.indexOf("Note");
-            var imported = 0;
+            
+            // Funzione per trovare indice colonna (match flessibile)
+            function findCol(names) {
+                for (var n = 0; n < names.length; n++) {
+                    for (var h = 0; h < headers.length; h++) {
+                        if (headers[h] && headers[h].toLowerCase().replace(/[_\s]/g, "") === names[n].toLowerCase().replace(/[_\s]/g, "")) {
+                            return h;
+                        }
+                    }
+                }
+                return -1;
+            }
+            
+            // Trova colonne con nomi alternativi
+            var idIdx = findCol(["ID", "Card_ID", "CardID", "id"]);
+            var altIdx = findCol(["Label Proposta", "Card_Name", "CardName", "Name", "Label"]);
+            var absIdx = findCol(["Abstract", "Card_Description", "Description", "Descrizione"]);
+            var targetIdx = findCol(["Target", "TargetUser", "Target_User"]);
+            var needIdx = findCol(["User Need", "UserNeed", "User_Need", "Need"]);
+            var useIdx = findCol(["Use Case", "UseCase", "Use_Case", "LifeEvent", "Life_Event"]);
+            var notesIdx = findCol(["Note", "Notes"]);
+            var macroIdx = findCol(["Nuova Macro", "NuovaMacro", "Category_Macro_Area", "MacroArea", "Macro"]);
+            var sottoIdx = findCol(["Nuova Sotto", "NuovaSotto", "Subcategory", "SottoCategoria", "Sotto"]);
+            var terzoIdx = findCol(["3 Livello", "TerzoLivello", "Terzo"]);
+            var parentIdx = findCol(["Gruppo Parent", "GruppoParent", "Parent"]);
+            var urlIdx = findCol(["URL", "Link"]);
+            var asisIdx = findCol(["Categoria AS-IS", "Original_ASIS_Category", "ASIS", "OriginalCategory"]);
+            
+            console.log("Colonne trovate:", {id: idIdx, alt: altIdx, macro: macroIdx, sotto: sottoIdx});
+            
+            if (idIdx < 0) {
+                showToast("Colonna ID non trovata", "error");
+                return;
+            }
+            
+            // Raccogli tutte le card dall'Excel
+            var excelCards = {}; // {id: {fields, locations: []}}
+            
             for (var i = 1; i < data.length; i++) {
                 var row = data[i];
-                var id = String(row[idIdx]);
-                if (cardsData[id]) {
-                    if (altIdx >= 0 && row[altIdx]) cardsData[id].altLabel = row[altIdx];
-                    if (absIdx >= 0 && row[absIdx]) cardsData[id].abstract = row[absIdx];
-                    if (targetIdx >= 0 && row[targetIdx]) cardsData[id].targetUser = row[targetIdx];
-                    if (needIdx >= 0 && row[needIdx]) cardsData[id].userNeed = row[needIdx];
-                    if (useIdx >= 0 && row[useIdx]) cardsData[id].useCase = row[useIdx];
-                    if (notesIdx >= 0 && row[notesIdx]) cardsData[id].notes = row[notesIdx];
-                    imported++;
+                if (!row || !row[idIdx]) continue;
+                var id = String(row[idIdx]).trim();
+                if (!id) continue;
+                
+                // Inizializza se prima volta
+                if (!excelCards[id]) {
+                    excelCards[id] = {
+                        altLabel: altIdx >= 0 ? (row[altIdx] || null) : null,
+                        abstract: absIdx >= 0 ? (row[absIdx] || null) : null,
+                        targetUser: targetIdx >= 0 ? (row[targetIdx] || null) : null,
+                        userNeed: needIdx >= 0 ? (row[needIdx] || null) : null,
+                        useCase: useIdx >= 0 ? (row[useIdx] || null) : null,
+                        notes: notesIdx >= 0 ? (row[notesIdx] || null) : null,
+                        url: urlIdx >= 0 ? (row[urlIdx] || null) : null,
+                        asisCategory: asisIdx >= 0 ? (row[asisIdx] || null) : null,
+                        locations: [],
+                        parentId: null
+                    };
+                }
+                
+                // Raccogli posizionamento
+                var macroName = macroIdx >= 0 ? String(row[macroIdx] || "").trim() : "";
+                var sottoName = sottoIdx >= 0 ? String(row[sottoIdx] || "").trim() : "";
+                var terzoName = terzoIdx >= 0 ? String(row[terzoIdx] || "").trim() : "";
+                var parentId = parentIdx >= 0 ? String(row[parentIdx] || "").trim() : "";
+                
+                if (macroName && sottoName) {
+                    excelCards[id].locations.push({macro: macroName, sotto: sottoName, terzo: terzoName});
+                }
+                
+                if (parentId && parentId !== id) {
+                    excelCards[id].parentId = parentId;
                 }
             }
+            
+            console.log("Card trovate in Excel:", Object.keys(excelCards).length);
+            
+            // Funzione per trovare IDs struttura
+            function findLocationIds(macroName, sottoName, terzoName) {
+                for (var m = 0; m < structureData.macroAreas.length; m++) {
+                    var macro = structureData.macroAreas[m];
+                    var macroMatch = macro.name.toLowerCase().indexOf(macroName.toLowerCase()) !== -1 ||
+                                     macroName.toLowerCase().indexOf(macro.name.toLowerCase()) !== -1;
+                    if (macroMatch) {
+                        var sottos = macro.sottoCategorie || [];
+                        for (var s = 0; s < sottos.length; s++) {
+                            var sotto = sottos[s];
+                            var sottoMatch = sotto.name.toLowerCase().indexOf(sottoName.toLowerCase()) !== -1 ||
+                                            sottoName.toLowerCase().indexOf(sotto.name.toLowerCase()) !== -1;
+                            if (sottoMatch) {
+                                var terzoId = null;
+                                if (terzoName && sotto.terzoLivello) {
+                                    for (var t = 0; t < sotto.terzoLivello.length; t++) {
+                                        if (sotto.terzoLivello[t].name.toLowerCase().indexOf(terzoName.toLowerCase()) !== -1) {
+                                            terzoId = sotto.terzoLivello[t].id;
+                                            break;
+                                        }
+                                    }
+                                }
+                                return {
+                                    macroId: macro.id,
+                                    sottoId: sotto.id,
+                                    terzoId: terzoId,
+                                    macro: macro.name,
+                                    sotto: sotto.name,
+                                    terzo: terzoName || null
+                                };
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+            
+            // Reset children di tutte le card
+            var allKeys = Object.keys(cardsData);
+            for (var k = 0; k < allKeys.length; k++) {
+                if (cardsData[allKeys[k]].children) {
+                    cardsData[allKeys[k]].children = [];
+                }
+            }
+            
+            // Applica dati dall'Excel
+            var imported = 0;
+            var positioned = 0;
+            var notPositioned = 0;
+            var grouped = 0;
+            
+            for (var cardId in excelCards) {
+                // Verifica che la card esista
+                if (!cardsData[cardId]) {
+                    console.log("Card non trovata:", cardId);
+                    continue;
+                }
+                
+                var excelCard = excelCards[cardId];
+                
+                // Aggiorna campi descrittivi (solo se valorizzati)
+                if (excelCard.altLabel) cardsData[cardId].altLabel = String(excelCard.altLabel);
+                if (excelCard.abstract) cardsData[cardId].abstract = String(excelCard.abstract);
+                if (excelCard.targetUser) cardsData[cardId].targetUser = String(excelCard.targetUser);
+                if (excelCard.userNeed) cardsData[cardId].userNeed = String(excelCard.userNeed);
+                if (excelCard.useCase) cardsData[cardId].useCase = String(excelCard.useCase);
+                if (excelCard.notes) cardsData[cardId].notes = String(excelCard.notes);
+                
+                // IMPORTANTE: Reset locations per questa card
+                cardsData[cardId].locations = [];
+                
+                // Applica nuove locations (se presenti)
+                if (excelCard.locations.length > 0) {
+                    for (var l = 0; l < excelCard.locations.length; l++) {
+                        var loc = findLocationIds(
+                            excelCard.locations[l].macro,
+                            excelCard.locations[l].sotto,
+                            excelCard.locations[l].terzo
+                        );
+                        if (loc) {
+                            cardsData[cardId].locations.push(loc);
+                            positioned++;
+                        }
+                    }
+                } else {
+                    // Card senza posizionamento - rimane nella sidebar
+                    notPositioned++;
+                }
+                
+                cardsData[cardId].lastModifiedBy = currentUser ? currentUser.name : "Import Excel";
+                cardsData[cardId].lastModified = new Date().toISOString();
+                imported++;
+            }
+            
+            // Applica gruppi
+            for (var cardId in excelCards) {
+                var parentId = excelCards[cardId].parentId;
+                if (parentId && cardsData[parentId] && cardsData[cardId]) {
+                    if (!cardsData[parentId].children) cardsData[parentId].children = [];
+                    if (cardsData[parentId].children.indexOf(cardId) === -1) {
+                        cardsData[parentId].children.push(cardId);
+                        cardsData[cardId].locations = [];
+                        grouped++;
+                    }
+                }
+            }
+            
             saveData();
             renderAll();
-            showToast("Importate " + imported + " schede", "success");
+            
+            var msg = "Importate " + imported + " schede";
+            if (positioned > 0) msg += ", " + positioned + " posizionate";
+            if (notPositioned > 0) msg += ", " + notPositioned + " da classificare";
+            if (grouped > 0) msg += ", " + grouped + " raggruppate";
+            showToast(msg, "success");
+            
         } catch(err) {
+            console.error(err);
             showToast("Errore: " + err.message, "error");
         }
     };
     reader.readAsBinaryString(file);
 }
 
-// ===== UTILS =====
+// ===== RENDER ALL =====
 function renderAll() {
     renderCards();
     renderMacros();
     renderNavChips();
 }
 
+// ===== UTILS =====
 function showToast(msg, type) {
     var c = document.getElementById("toastContainer");
     var t = document.createElement("div");
@@ -1184,6 +1369,12 @@ function closeConfirm() {
 function execConfirm() {
     if (confirmCb) confirmCb();
     closeConfirm();
+}
+
+function closeMenu() {
+    var menus = document.querySelectorAll(".card-menu-dropdown.show");
+    for (var i = 0; i < menus.length; i++) menus[i].classList.remove("show");
+    openMenuId = null;
 }
 
 // ===== DRAG & DROP =====
@@ -1213,7 +1404,6 @@ function handleDragEnd(e) {
 
 function handleDragOver(e) {
     e.preventDefault();
-    // Highlight card target for grouping
     var targetCard = e.target.closest(".sotto-card");
     if (targetCard && !targetCard.getAttribute("data-is-child")) {
         targetCard.classList.add("drag-over-card");
@@ -1232,18 +1422,14 @@ function handleDragLeave(e) {
 function handleDrop(e) {
     e.preventDefault();
     
-    // Check if dropping on another card (for grouping)
     var targetCard = e.target.closest(".sotto-card");
     if (targetCard) {
         targetCard.classList.remove("drag-over-card");
         var targetCardId = targetCard.getAttribute("data-card-id");
         var cardId = e.dataTransfer.getData("text/plain");
-        if (cardId && targetCardId && cardId !== targetCardId) {
-            // Don't group if target is a child
-            if (!targetCard.getAttribute("data-is-child")) {
-                groupCards(targetCardId, cardId);
-                return;
-            }
+        if (cardId && targetCardId && cardId !== targetCardId && !targetCard.getAttribute("data-is-child")) {
+            groupCards(targetCardId, cardId);
+            return;
         }
     }
     
@@ -1254,18 +1440,15 @@ function handleDrop(e) {
     if (!cardId) return;
     
     if (target && target.classList.contains("cards-container")) {
-        // Drop to sidebar - remove from location
         if (draggedFromLoc) {
             removeLoc(cardId, draggedFromLoc.macroId, draggedFromLoc.sottoId, draggedFromLoc.terzoId);
         }
     } else if (target && target.classList.contains("sotto-cat")) {
-        // Drop to category
         var macroId = target.getAttribute("data-macro-id");
         var sottoId = target.getAttribute("data-sotto-id");
         var terzoId = target.getAttribute("data-terzo-id") || null;
         
         if (draggedFromLoc) {
-            // Remove from old location first
             if (cardsData[cardId] && cardsData[cardId].locations) {
                 cardsData[cardId].locations = cardsData[cardId].locations.filter(function(l) {
                     if (draggedFromLoc.terzoId) {
@@ -1281,19 +1464,13 @@ function handleDrop(e) {
 
 // ===== EVENT LISTENERS =====
 document.addEventListener("DOMContentLoaded", function() {
-    // User modal
     document.getElementById("enterBtn").onclick = enterSession;
     document.getElementById("usernameInput").onkeypress = function(e) {
         if (e.key === "Enter") enterSession();
     };
     
-    // Card modal
-    document.getElementById("closeCardBtn").onclick = closeCardModal;
     document.getElementById("saveCardBtn").onclick = saveCardDetail;
-    
-    // Admin modal
     document.getElementById("adminBtn").onclick = openAdminModal;
-    document.getElementById("closeAdminBtn").onclick = closeAdminModal;
     document.getElementById("saveSessionBtn").onclick = saveSession;
     document.getElementById("exportBtn").onclick = exportSession;
     document.getElementById("exportBtnHeader").onclick = exportSession;
@@ -1302,127 +1479,104 @@ document.addEventListener("DOMContentLoaded", function() {
         e.target.value = "";
     };
     
-    // Confirm dialog
-    document.getElementById("cancelConfirmBtn").onclick = closeConfirm;
-    document.getElementById("execConfirmBtn").onclick = execConfirm;
-    
-    // Nav buttons
     document.getElementById("expandAllBtn").onclick = function() { toggleAll(true); };
     document.getElementById("collapseAllBtn").onclick = function() { toggleAll(false); };
     document.getElementById("addMacroTopBtn").onclick = addMacroTop;
     document.getElementById("addMacroBottomBtn").onclick = addMacroBottom;
     
-    // Filters
     document.getElementById("searchBox").oninput = renderCards;
     document.getElementById("asisFilter").onchange = renderCards;
     document.querySelectorAll(".filter-btn").forEach(function(btn) {
         btn.onclick = function() { setFilter(this.getAttribute("data-f")); };
     });
     
+    // Close menus on outside click
+    document.addEventListener("click", function(e) {
+        if (!e.target.closest(".card-menu")) closeMenu();
+    });
+    
     // Delegated events
     document.addEventListener("click", function(e) {
-        // Duplicate sotto-card button
-        if (e.target.matches("[data-dup-sotto]")) {
+        // Menu toggle
+        if (e.target.matches("[data-menu-toggle]")) {
             e.stopPropagation();
-            duplicateCard(e.target.getAttribute("data-dup-sotto"));
+            var menuId = "menu-" + e.target.getAttribute("data-menu-toggle");
+            var menu = document.getElementById(menuId);
+            closeMenu();
+            if (menu) menu.classList.add("show");
             return;
         }
-        // Ungroup button
-        if (e.target.matches("[data-ungroup]")) {
+        
+        // Actions
+        if (e.target.matches("[data-action]")) {
             e.stopPropagation();
-            ungroupCard(e.target.getAttribute("data-ungroup"));
+            var action = e.target.getAttribute("data-action");
+            var cardId = e.target.getAttribute("data-card");
+            closeMenu();
+            
+            if (action === "duplicate") duplicateCard(cardId);
+            else if (action === "ungroup") ungroupCard(cardId);
+            else if (action === "remove-all") removeAllLocs(cardId);
+            else if (action === "remove") {
+                var macro = e.target.getAttribute("data-macro");
+                var sotto = e.target.getAttribute("data-sotto");
+                var terzo = e.target.getAttribute("data-terzo") || null;
+                removeLoc(cardId, macro, sotto, terzo);
+            }
             return;
         }
-        // Edit sotto-card button
-        if (e.target.matches("[data-edit-sotto]")) {
-            e.stopPropagation();
-            openCardModal(e.target.getAttribute("data-edit-sotto"));
+        
+        // Open card modal
+        if (e.target.matches("[data-open-card]")) {
+            openCardModal(e.target.getAttribute("data-open-card"));
             return;
         }
-        // Duplicate button
-        if (e.target.matches("[data-dup]")) {
+        
+        // Remove location tag
+        if (e.target.matches("[data-remove-loc]")) {
             e.stopPropagation();
-            duplicateCard(e.target.getAttribute("data-dup"));
-            return;
-        }
-        // Edit button
-        if (e.target.matches("[data-edit]")) {
-            openCardModal(e.target.getAttribute("data-edit"));
-            return;
-        }
-        // Remove location
-        if (e.target.matches(".remove-loc")) {
-            e.stopPropagation();
-            var card = e.target.getAttribute("data-card");
-            var macro = e.target.getAttribute("data-macro");
-            var sotto = e.target.getAttribute("data-sotto");
-            var terzo = e.target.getAttribute("data-terzo") || null;
-            removeLoc(card, macro, sotto, terzo);
-            return;
-        }
-        // Remove card from sotto
-        if (e.target.matches("[data-remove-card]")) {
-            e.stopPropagation();
-            var parts = e.target.getAttribute("data-remove-card").split("|");
+            var parts = e.target.getAttribute("data-remove-loc").split("|");
             removeLoc(parts[0], parts[1], parts[2], parts[3] || null);
             return;
         }
+        
         // Toggle macro
-        if (e.target.matches("[data-toggle]")) {
-            var id = e.target.getAttribute("data-toggle");
-            var el = document.getElementById("macro-" + id);
+        if (e.target.closest("[data-toggle-macro]")) {
+            var macroId = e.target.closest("[data-toggle-macro]").getAttribute("data-toggle-macro");
+            var el = document.getElementById("macro-" + macroId);
             if (el) el.classList.toggle("collapsed");
             return;
         }
-        // Delete macro
-        if (e.target.matches("[data-delete-macro]")) {
-            e.stopPropagation();
-            deleteMacro(e.target.getAttribute("data-delete-macro"));
+        
+        // Toggle sotto
+        if (e.target.closest("[data-toggle-sotto]")) {
+            var sottoId = e.target.closest("[data-toggle-sotto]").getAttribute("data-toggle-sotto");
+            var el = e.target.closest(".sotto-cat");
+            if (el) el.classList.toggle("collapsed");
             return;
         }
+        
         // Add sotto
         if (e.target.matches("[data-add-sotto]")) {
             addSotto(e.target.getAttribute("data-add-sotto"));
             return;
         }
-        // Delete sotto
-        if (e.target.matches("[data-delete-sotto]")) {
-            var parts = e.target.getAttribute("data-delete-sotto").split("|");
-            deleteSotto(parts[0], parts[1]);
-            return;
-        }
+        
         // Add terzo
         if (e.target.matches("[data-add-terzo]")) {
             var parts = e.target.getAttribute("data-add-terzo").split("|");
             addTerzo(parts[0], parts[1]);
             return;
         }
-        // Delete terzo
-        if (e.target.matches("[data-delete-terzo]")) {
-            var parts = e.target.getAttribute("data-delete-terzo").split("|");
-            deleteTerzo(parts[0], parts[1], parts[2]);
-            return;
-        }
-        // Load session
+        
+        // Load/delete session
         if (e.target.matches("[data-load-session]")) {
             loadSession(parseInt(e.target.getAttribute("data-load-session")));
             return;
         }
-        // Delete session
         if (e.target.matches("[data-delete-session]")) {
             deleteSession(parseInt(e.target.getAttribute("data-delete-session")));
             return;
-        }
-    });
-    
-    // Input changes
-    document.addEventListener("change", function(e) {
-        if (e.target.matches("[data-macro-name]")) {
-            updateMacroName(e.target.getAttribute("data-macro-name"), e.target.value);
-        }
-        if (e.target.matches("[data-sotto-name]")) {
-            var parts = e.target.getAttribute("data-sotto-name").split("|");
-            // updateSottoName would need to be implemented
         }
     });
     
@@ -1433,7 +1587,16 @@ document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("dragleave", handleDragLeave);
     document.addEventListener("drop", handleDrop);
     
-    // Focus username input
+    // ESC to close modals
+    document.onkeydown = function(e) {
+        if (e.key === "Escape") {
+            closeCardModal();
+            closeAdminModal();
+            closeConfirm();
+            closeMenu();
+        }
+    };
+    
     document.getElementById("usernameInput").focus();
 });
 </script>
