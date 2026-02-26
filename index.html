@@ -671,7 +671,7 @@ function renderMacros() {
         var cnt = countMacroCards(m.id);
         
         html += '<div class="macro-area" id="macro-' + m.id + '" data-macro-id="' + m.id + '">';
-        html += '<div class="macro-header ' + gradients[i % 9] + '">';
+        html += '<div class="macro-header ' + gradients[i % 9] + '" data-toggle-macro="' + m.id + '">';
         html += '<div class="macro-title" style="flex:1">';
         html += '<span class="macro-icon" style="cursor:pointer" data-toggle-macro="' + m.id + '">' + (m.icon || icons[i % icons.length]) + '</span>';
         html += '<span class="macro-name editable-name" data-edit-macro-name="' + m.id + '">' + m.name + '</span>';
@@ -696,7 +696,7 @@ function renderMacros() {
 function renderSotto(macroId, sotto) {
     var cards = getCardsInSotto(macroId, sotto.id);
     var html = '<div class="sotto-cat" data-macro-id="' + macroId + '" data-sotto-id="' + sotto.id + '">';
-    html += '<div class="sotto-header">';
+    html += '<div class="sotto-header" data-toggle-sotto="' + sotto.id + '">';
     html += '<span class="sotto-name editable-name" data-edit-sotto-name="' + macroId + '|' + sotto.id + '">' + sotto.name + '</span>';
     html += '<span style="display:flex;align-items:center;gap:4px">';
     html += '<span class="sotto-count" data-toggle-sotto="' + sotto.id + '">' + cards.length + '</span>';
