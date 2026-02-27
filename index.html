@@ -104,6 +104,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .macro-name{font-size:16px;font-weight:600}
 .macro-badge{background:rgba(255,255,255,.25);padding:4px 12px;border-radius:12px;font-size:13px;margin-left:10px}
 .macro-content{padding:16px}
+.toggle-icon{font-size:12px;margin-right:4px;transition:transform .2s;display:inline-block}
+.macro-area.collapsed .toggle-icon{transform:rotate(-90deg)}
+.toggle-icon-sotto{font-size:10px;color:#64748b;transition:transform .2s;display:inline-block}
+.sotto-cat.collapsed .toggle-icon-sotto{transform:rotate(-90deg)}
 .editable-name{cursor:text;padding:2px 6px;border-radius:4px;transition:background .2s}
 .editable-name:hover{background:rgba(255,255,255,.2)}
 .edit-input{background:rgba(255,255,255,.9);border:2px solid #fff;border-radius:4px;padding:4px 8px;font-size:inherit;font-weight:inherit;color:#1e293b;width:auto;min-width:150px}
@@ -671,11 +675,12 @@ function renderMacros() {
         var cnt = countMacroCards(m.id);
         
         html += '<div class="macro-area" id="macro-' + m.id + '" data-macro-id="' + m.id + '">';
-        html += '<div class="macro-header ' + gradients[i % 9] + '" data-toggle-macro="' + m.id + '">';
-        html += '<div class="macro-title" style="flex:1">';
-        html += '<span class="macro-icon" style="cursor:pointer" data-toggle-macro="' + m.id + '">' + (m.icon || icons[i % icons.length]) + '</span>';
+        html += '<div class="macro-header ' + gradients[i % 9] + '">';
+        html += '<div class="macro-title" style="flex:1;cursor:pointer" data-toggle-macro="' + m.id + '">';
+        html += '<span class="toggle-icon">▼</span>';
+        html += '<span class="macro-icon">' + (m.icon || icons[i % icons.length]) + '</span>';
         html += '<span class="macro-name editable-name" data-edit-macro-name="' + m.id + '">' + m.name + '</span>';
-        html += '<span class="macro-badge" data-toggle-macro="' + m.id + '">' + cnt + '</span></div>';
+        html += '<span class="macro-badge">' + cnt + '</span></div>';
         html += '<button class="delete-btn" data-delete-macro="' + m.id + '" title="Elimina macro-area">🗑️</button>';
         html += '</div>';
         html += '<div class="macro-content">';
@@ -699,7 +704,7 @@ function renderSotto(macroId, sotto) {
     html += '<div class="sotto-header" data-toggle-sotto="' + sotto.id + '">';
     html += '<span class="sotto-name editable-name" data-edit-sotto-name="' + macroId + '|' + sotto.id + '">' + sotto.name + '</span>';
     html += '<span style="display:flex;align-items:center;gap:4px">';
-    html += '<span class="sotto-count" data-toggle-sotto="' + sotto.id + '">' + cards.length + '</span>';
+    html += '<span class="sotto-count">' + cards.length + '</span>';
     html += '<button class="sotto-delete-btn" data-delete-sotto="' + macroId + '|' + sotto.id + '" title="Elimina">🗑️</button>';
     html += '</span></div>';
     html += '<div class="sotto-cards">';
@@ -1783,17 +1788,31 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Toggle macro
         if (e.target.closest("[data-toggle-macro]")) {
+            // Non fare toggle se stiamo editando il nome
+            if (e.target.matches("[data-edit-macro-name]")) return;
+            if (e.target.closest(".edit-input")) return;
+            e.preventDefault();
+            e.stopPropagation();
             var macroId = e.target.closest("[data-toggle-macro]").getAttribute("data-toggle-macro");
             var el = document.getElementById("macro-" + macroId);
-            if (el) el.classList.toggle("collapsed");
+            if (el) {
+                el.classList.toggle("collapsed");
+            }
             return;
         }
         
         // Toggle sotto
         if (e.target.closest("[data-toggle-sotto]")) {
+            // Non fare toggle se stiamo editando il nome
+            if (e.target.matches("[data-edit-sotto-name]")) return;
+            if (e.target.closest(".edit-input")) return;
+            e.preventDefault();
+            e.stopPropagation();
             var sottoId = e.target.closest("[data-toggle-sotto]").getAttribute("data-toggle-sotto");
             var el = e.target.closest(".sotto-cat");
-            if (el) el.classList.toggle("collapsed");
+            if (el) {
+                el.classList.toggle("collapsed");
+            }
             return;
         }
         
