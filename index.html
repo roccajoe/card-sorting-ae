@@ -876,7 +876,7 @@ function viewArchitecture() {
             
             for (var k = 0; k < sotto.cards.length; k++) {
                 var card = sotto.cards[k];
-                var cardJson = JSON.stringify(card).replace(/"/g, """);
+                var cardJson = JSON.stringify(card).replace(/"/g, "&quot;");
                 doc.write("<div class=\"card-item\" data-card=\"" + cardJson + "\" data-asis=\"" + (card.asis || "") + "\" onclick=\"openCard(this)\"><div class=\"card-header\"><span class=\"card-id\">ID " + card.id + "</span>");
                 if (card.asis) doc.write("<span class=\"card-asis\">" + card.asis + "</span>");
                 doc.write("</div><div class=\"card-label\">" + card.label + "</div>");
@@ -972,7 +972,7 @@ function openCard(id) {
     if (c.asisCategory) html += '<div class="modal-field"><label>Categoria AS-IS</label><div style="color:#1e40af">' + c.asisCategory + '</div></div>';
     if (c.url) html += '<div class="modal-field"><label>URL</label><div><a href="' + c.url + '" target="_blank" style="color:#3b82f6">' + c.url + '</a></div></div>';
     
-    html += '<div class="modal-field"><label>Label alternativa</label><input id="inp_alt" value="' + (c.altLabel || "").replace(/"/g, """) + '"></div>';
+    html += '<div class="modal-field"><label>Label alternativa</label><input id="inp_alt" value="' + (c.altLabel || "").replace(/"/g, "&quot;") + '"></div>';
     html += '<div class="modal-field"><label>Abstract</label><textarea id="inp_abs" rows="2">' + (c.abstract || "") + '</textarea></div>';
     html += '<div class="modal-field"><label>Note</label><textarea id="inp_note" rows="2">' + (c.notes || "") + '</textarea></div>';
     
